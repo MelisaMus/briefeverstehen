@@ -20,7 +20,7 @@ export function BriefShell({ children, result = false }: { children: ReactNode; 
     </div>
     {children}
     <footer className="site-footer">
-      <div className="footer-inner"><span className="footer-brand"><Mail size={18}/> Brief verstehen</span><span><ShieldCheck size={16}/> Keine Speicherung deiner Briefe</span><span>Mit Sorgfalt. Für Menschen.</span></div>
+      <div className="footer-inner"><span className="footer-brand"><Mail size={18}/> Brief verstehen</span><span><ShieldCheck size={16}/> Wir speichern deine Briefe nicht</span><span>Mit Sorgfalt. Für Menschen.</span></div>
     </footer>
   </div>;
 }

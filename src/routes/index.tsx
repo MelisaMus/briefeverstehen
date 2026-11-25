@@ -1,19 +1,24 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, CalendarDays, Camera, Check, CheckCheck, FileCheck2, FileText, HeartHandshake, Info, Languages, LockKeyhole, Mail, MessageCircle, ShieldCheck, Type, Upload, X } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { ArrowRight, ArrowUp, ArrowDown, CalendarDays, Camera, Check, CheckCheck, FileCheck2, FileText, HeartHandshake, Info, Languages, LoaderCircle, LockKeyhole, Mail, MessageCircle, ShieldCheck, Type, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { BriefShell } from "@/components/brief-shell";
 import { LanguagePicker } from "@/components/language-picker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { LanguageCode } from "@/config/languages";
+import { getLanguage, languages, type LanguageCode } from "@/config/languages";
 import { localDateInput } from "@/lib/deadlines";
+import { analyzeLetter } from "@/lib/analyze-letter.functions";
+import { useLetterSession } from "@/components/letter-session";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { requestConfig } from "@/config/analysis";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
     { title: "Brief hinzufügen | Brief verstehen" },
-    { name: "description", content: "Behördenbrief fotografieren, hochladen oder als Text einfügen. Layout-Vorschau von Brief verstehen für Fachkräfte und Familien." },
+    { name: "description", content: "Behördenbrief fotografieren, hochladen oder als Text einfügen und mit KI in Leichtem Deutsch und deiner Sprache erklären lassen." },
     { property: "og:title", content: "Brief verstehen – Brief hinzufügen" },
     { property: "og:description", content: "Gemeinsam Klarheit finden: Behördenbriefe in Leichtem Deutsch und neun weiteren Sprachen." },
     { property: "og:type", content: "website" },
@@ -35,6 +40,8 @@ function FilePreview({ file }: { file: File }) {
 
 function Index() {
   const navigate = useNavigate();
+  const analyze = useServerFn(analyzeLetter);
+  const { setSession } = useLetterSession();
   const uploadRef = useRef<HTMLInputElement>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<{ id: string; file: File }[]>([]);
@@ -42,8 +49,39 @@ function Index() {
   const [text, setText] = useState("");
   const [arrival, setArrival] = useState("");
   const [language, setLanguage] = useState<LanguageCode>("ro");
+  const [translate, setTranslate] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState("");
+  const [error, setError] = useState("");
   const [dragging, setDragging] = useState(false);
-  useEffect(() => setArrival(localDateInput(new Date())), []);
+  useEffect(() => { setArrival(localDateInput(new Date())); setSession(null); }, [setSession]);
+
+  async function submit() {
+    if (busy || (!files.length && !text.trim())) return;
+    if (!arrival) { setError("Bitte das Ankunftsdatum auswählen."); return; }
+    setBusy(true); setError("");
+    try {
+      const { prepareLetter } = await import("@/lib/prepare-letter");
+      const pages = await prepareLetter(files.map((item) => item.file), setProgress);
+      setProgress("Dein Brief wird gelesen und erklärt …");
+      const today = localDateInput(new Date());
+      const response = await analyze({ data: { pages, text: text.trim(), arrivalDate: arrival, today } });
+      if (!response.ok) { setError(response.message); return; }
+      setSession({ letter: response.letter, arrivalDate: arrival, today });
+      await navigate({ to: "/ergebnis", search: { sprache: translate ? language : "de" } });
+    } catch (failure) {
+      setError(failure instanceof Error && /^(Das Bild|Die PDF|Der Brief ist zu groß|Bitte höchstens)/.test(failure.message) ? failure.message : "Die Anfrage konnte nicht abgeschlossen werden. Bitte erneut versuchen.");
+    } finally { setBusy(false); setProgress(""); }
+  }
+
+  function reorder(id: string, direction: -1 | 1) {
+    setFiles((previous) => {
+      const next = [...previous]; const index = next.findIndex((item) => item.id === id);
+      const item = next[index]; const other = next[index + direction];
+      if (!item || !other) return previous;
+      next[index] = other; next[index + direction] = item; return next;
+    });
+  }
 
   function addFiles(list: FileList | File[]) {
     const selected = Array.from(list);
@@ -67,22 +105,24 @@ function Index() {
             <h2>Deinen Brief hinzufügen</h2>
             <p>Ein Foto oder eine Datei genügt.</p>
             <div className="upload-buttons">
-              <Button variant="action" size="touch" onClick={() => cameraRef.current?.click()}><Camera/> Brief fotografieren</Button>
-              <Button variant="upload" size="touch" onClick={() => uploadRef.current?.click()}><Upload/> Datei hochladen</Button>
+              <Button disabled={busy} variant="action" size="touch" onClick={() => cameraRef.current?.click()}><Camera/> Brief fotografieren</Button>
+              <Button disabled={busy} variant="upload" size="touch" onClick={() => uploadRef.current?.click()}><Upload/> Datei hochladen</Button>
             </div>
             <span className="file-types"><FileText size={13}/> Bilder oder PDF · auch mehrere Seiten</span>
             <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden aria-label="Brief mit Kamera fotografieren" onChange={(event) => { if (event.target.files) addFiles(event.target.files); event.target.value = ""; }}/>
             <input ref={uploadRef} type="file" accept="image/*,application/pdf" multiple hidden aria-label="Bilder oder PDF auswählen" onChange={(event) => { if (event.target.files) addFiles(event.target.files); event.target.value = ""; }}/>
-            {files.length > 0 && <div className="file-list" aria-live="polite">{files.map(({ id, file }) => <div className="file-row" key={id}><FilePreview file={file}/><div className="file-info"><strong>{file.name}</strong><span>{Math.max(1, Math.round(file.size / 1024))} KB · nur auf diesem Gerät</span></div><Button variant="ghost" size="icon" title="Datei entfernen" aria-label={`${file.name} entfernen`} onClick={() => setFiles((previous) => previous.filter((item) => item.id !== id))}><X/></Button></div>)}</div>}
+            {files.length > 0 && <div className="file-list" aria-live="polite">{files.map(({ id, file }, index) => <div className="file-row" key={id}><FilePreview file={file}/><div className="file-info"><strong>{index + 1}. {file.name}</strong><span>{Math.max(1, Math.round(file.size / 1024))} KB</span></div><div className="flex flex-wrap justify-end"><Button disabled={busy || index === 0} variant="ghost" size="icon" title="Nach oben" aria-label={`${file.name} nach oben`} onClick={() => reorder(id, -1)}><ArrowUp/></Button><Button disabled={busy || index === files.length - 1} variant="ghost" size="icon" title="Nach unten" aria-label={`${file.name} nach unten`} onClick={() => reorder(id, 1)}><ArrowDown/></Button><Button disabled={busy} variant="ghost" size="icon" title="Datei entfernen" aria-label={`${file.name} entfernen`} onClick={() => setFiles((previous) => previous.filter((item) => item.id !== id))}><X/></Button></div></div>)}</div>}
           </div>
           <div className="text-toggle"><Button variant="ghost" onClick={() => setTextOpen(!textOpen)} aria-expanded={textOpen} aria-controls="letter-text"><Type size={15}/>{textOpen ? "Textfeld schließen" : "Lieber Text einfügen"}</Button></div>
-          {textOpen && <div className="text-entry" id="letter-text"><label className="field-label" htmlFor="text">Text aus dem Brief</label><Textarea id="text" value={text} onChange={(event) => setText(event.target.value)} placeholder="Den Text des Briefes hier einfügen …"/></div>}
+          {textOpen && <div className="text-entry" id="letter-text"><label className="field-label" htmlFor="text">Text aus dem Brief</label><Textarea disabled={busy} maxLength={requestConfig.maxTextCharacters} id="text" value={text} onChange={(event) => setText(event.target.value)} placeholder="Den Text des Briefes hier einfügen …"/></div>}
           <div className="form-settings">
             <div><label className="field-label" htmlFor="arrival">Wann kam der Brief an?</label><div className="date-field"><CalendarDays size={19}/><Input id="arrival" type="date" value={arrival} onChange={(event) => setArrival(event.target.value)}/></div><p className="field-hint">Ankunftsdatum, nicht das Datum auf dem Brief.</p></div>
-            <div><label className="field-label" htmlFor="language">In welcher Sprache?</label><LanguagePicker value={language} onChange={setLanguage}/><p className="field-hint">Leichtes Deutsch ist immer dabei.</p></div>
+            <div><label className="field-label" htmlFor="language">In welcher Sprache?</label><Select value={translate ? language : "de"} onValueChange={(code) => { setTranslate(code !== "de"); if (code !== "de") setLanguage(getLanguage(code).code); }}><SelectTrigger disabled={busy} id="language" className="language-select" aria-label="Zielsprache"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="de">Nur Leichtes Deutsch</SelectItem>{languages.map((item) => <SelectItem key={item.code} value={item.code}>{item.label} · {item.native}</SelectItem>)}</SelectContent></Select><p className="field-hint">Leichtes Deutsch ist immer dabei.</p></div>
           </div>
-          <Button variant="action" size="touch" className="preview-button" onClick={() => { void navigate({ to: "/ergebnis", search: { sprache: language } }); }}>{files.length > 0 || text.trim() ? "Mit Beispieldaten fortfahren" : "Beispiel ansehen"}<ArrowRight/></Button>
-          <p className="demo-notice"><Info size={14}/><span>Layout-Vorschau: Du siehst einen Beispielbrief. Deine Dateien werden noch nicht analysiert oder gesendet.</span></p>
+          <Button disabled={busy || (!files.length && !text.trim())} variant="action" size="touch" className="preview-button" onClick={() => { void submit(); }}>{busy ? <LoaderCircle className="animate-spin"/> : <ArrowRight/>}{busy ? "Brief wird gelesen …" : "Brief verstehen"}</Button>
+          {busy && <p className="mt-3 text-sm text-primary" role="status">{progress}</p>}
+          {error && <p role="alert" className="mt-3 text-sm leading-relaxed text-destructive">{error}</p>}
+          <p className="demo-notice"><Info size={14}/><span>Der Brief wird zur KI-Verarbeitung gesendet. Wir speichern deine Briefe nicht.</span></p>
         </section>
         <aside className="upload-aside">
           <h2>Einfach. Schritt für Schritt.</h2>
@@ -93,7 +133,7 @@ function Index() {
           <div className="aside-bottom"><HeartHandshake size={27} strokeWidth={1.5}/><div><strong>Für den nächsten Schritt.</strong><p>Gemeinsam mit Dolmetscher:innen<br/>und Sozialarbeiter:innen.</p></div><div className="letter-categories"><span><Mail size={12}/> Jobcenter</span><span><Mail size={12}/> Schule</span><span><Mail size={12}/> Behörden</span></div></div>
         </aside>
       </div>
-      <div className="trust-line"><span><LockKeyhole size={14}/> Keine Speicherung</span><span><FileCheck2 size={14}/> Kein Konto nötig</span><span><MessageCircle size={14}/> 9 Zielsprachen</span></div>
+      <div className="trust-line"><span><LockKeyhole size={14}/> Wir speichern deine Briefe nicht</span><span><FileCheck2 size={14}/> Kein Konto nötig</span><span><MessageCircle size={14}/> 9 Zielsprachen</span></div>
     </main>
   </BriefShell>;
 }

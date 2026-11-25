@@ -1,11 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Volume2, Square, type LucideIcon } from "lucide-react";
+import { Volume2, Square, LoaderCircle, type LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { getLanguage, type LanguageCode } from "@/config/languages";
 
-export function ResultCard({ title, icon: Icon, children, language, germanText, translatedText, className = "" }: {
-  title: string; icon: LucideIcon; children: ReactNode; language: LanguageCode; germanText: string; translatedText: string; className?: string;
+export function ResultCard({ title, icon: Icon, children, language, germanText, translatedText, className = "", translating = false, showTranslation = true }: {
+  title: string; icon: LucideIcon; children: ReactNode; language: LanguageCode; germanText: string; translatedText: string; className?: string; translating?: boolean; showTranslation?: boolean;
 }) {
   const [speaking, setSpeaking] = useState<string | null>(null);
   useEffect(() => () => { if ("speechSynthesis" in window) window.speechSynthesis.cancel(); }, []);
@@ -25,13 +25,14 @@ export function ResultCard({ title, icon: Icon, children, language, germanText, 
   return <section className={`result-card ${className}`}>
     <div className="result-card-header"><span className="card-icon"><Icon size={23} strokeWidth={1.8}/></span><h2>{title}</h2></div>
     <div className="result-card-body">{children}</div>
+    {translating && <p className="px-5 pb-4 text-sm text-muted-foreground flex items-center gap-2" role="status"><LoaderCircle size={15} className="animate-spin"/>Übersetzung wird geladen …</p>}
     <div className="card-speech">
       <Button variant="ghost" size="sm" onClick={() => speak(false)} aria-label={`${title} auf Deutsch vorlesen`} title="Auf Deutsch vorlesen">{speaking === "de" ? <Square/> : <Volume2/>} Deutsch</Button>
-      <Button variant="ghost" size="sm" onClick={() => speak(true)} aria-label={`${title} auf ${getLanguage(language).label} vorlesen`} title={`Auf ${getLanguage(language).label} vorlesen`}>{speaking === language ? <Square/> : <Volume2/>} {getLanguage(language).native}</Button>
+      {showTranslation && <Button disabled={translating || !translatedText.trim()} variant="ghost" size="sm" onClick={() => speak(true)} aria-label={`${title} auf ${getLanguage(language).label} vorlesen`} title={`Auf ${getLanguage(language).label} vorlesen`}>{speaking === language ? <Square/> : <Volume2/>} {getLanguage(language).native}</Button>}
     </div>
   </section>;
 }
 
 export function Bilingual({ de, target, language }: { de: string; target: string; language: LanguageCode }) {
-  return <div className="bilingual"><p>{de}</p><p className="translation" lang={language} dir={language === "ar" ? "rtl" : "ltr"}>{target}</p></div>;
+  return <div className="bilingual"><p>{de}</p>{target && <p className="translation" lang={language} dir={language === "ar" ? "rtl" : "ltr"}>{target}</p>}</div>;
 }

@@ -30,8 +30,10 @@ use the editor.
 <!-- LOVABLE:END -->
 
 ## Application rules
-- Keep languages and sample translations in browser-safe configuration modules so the two preview routes share one editable source.
-- The current version is a frontend-only layout preview; hold selected documents in component memory and never send them to a server or persist them.
-- Render results on a separate TanStack route using clearly marked example data; uploaded documents must never be presented as analyzed.
+- Keep supported languages, model/provider selection and deadline parameters in configuration modules so they can be changed centrally.
+- Send transient documents only to server functions for immediate AI processing; keep results in React session state without database, storage, browser persistence or content logs.
+- Use separate analyze and translate TanStack server functions with server-only gateway calls; this stack replaces new Edge Functions with createServerFn.
+- Render results on a separate route from session state, showing German immediately and translating in a second request; direct reloads have an empty state, never example results.
 - Define all visual roles in the global design system and use shared page and result-card components to keep accessibility and bilingual presentation consistent.
-- Keep corrected letter dates in results-page memory and feed the shared date field, speech and exports from that state; fixed deadlines stay independent of letter-date corrections.
+- Feed corrected letter dates into pure deadline calculation, speech and exports from session state; relative deadlines recalculate while fixed deadlines remain independent of date corrections.
+- Gate both AI server functions on AI_CONTENT_LOGGING_DISABLED_VERIFIED until gateway payload capture is disabled and verified; zero provider retention alone does not disable gateway content logs.

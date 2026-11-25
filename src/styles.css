@@ -269,6 +269,11 @@ button, input, textarea { font: inherit; }
 .result-topbar > a { font-size: 13px; display: flex; align-items: center; gap: 7px; color: var(--muted-foreground); }
 .result-heading { text-align: left; margin-bottom: 25px; }
 .result-heading h1 { font-size: 34px; }
+.result-date-band { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.result-date-band > div { margin-top: 0; padding-top: 0; border-top: 0; }
+.reading-warning { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; margin-bottom: 20px; background: var(--soon-soft); color: var(--soon); border-radius: 5px; font-size: 14px; line-height: 1.65; }
+.reading-warning > svg { flex-shrink: 0; margin-top: 2px; }
+.deadline-quote summary { cursor: pointer; font-weight: 600; min-height: 36px; display: list-item; }
 .example-banner { display: flex; gap: 10px; align-items: flex-start; padding: 13px 16px; background: var(--secondary); color: var(--secondary-foreground); border-radius: 5px; font-size: 13px; margin-bottom: 25px; line-height: 1.6; }
 .example-banner > svg { flex-shrink: 0; margin-top: 2px; }
 .results-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; align-items: start; }
