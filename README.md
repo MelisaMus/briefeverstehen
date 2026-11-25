@@ -6,7 +6,7 @@ Die App erklärt Briefe in Leichtem Deutsch und auf Wunsch in einer weiteren Spr
 
 **Web-App:** [briefeverstehen.lovable.app](https://briefeverstehen.lovable.app)
 
-**Weiterentwicklung:** [Projekt in Lovable öffnen](https://lovable.dev/projects/2170c690-e4e8-4853-9d40-2c9f9007c0ec)
+**Weiterentwicklung:** Das zugehörige Projekt im Lovable-Arbeitsbereich öffnen.
 
 ## Funktionen
 
@@ -105,4 +105,4 @@ Ein lokaler Entwicklungsserver verwendet nicht exakt dieselbe Laufzeit wie die v
 
 `src/config/beratungsstellen.json` enthält derzeit 10 Einträge aus Freiburg und Umgebung. Jeder Eintrag enthält `name`, `thema`, `adresse`, `telefon`, `oeffnungszeiten` und `link`; zusätzlich werden `email` und `hinweis` unterstützt.
 
-Themen sind `abschiebung`, `ausreise`, `haft`, `gericht`, `inobhutnahme`, `raeumung` oder `sonstiges`. Telefonnummern werden für anklickbare `tel:`-Links in internationales Format umgewandelt, beispielsweise `0761 123456` zu `+49761123456`. E-Mail-Adressen erscheinen als `mailto:`-Links, Hinweise als kleiner grauer Text. Kontaktdaten und Öffnungszeiten sollten regelmäßig auf Aktualität geprüft werden.
+Themen sind `abschiebung`, `ausreise`, `haft`, `gericht`, `inobhutnahme`, `raeumung` oder `sonstiges`. Deutsche Telefonnummern werden für anklickbare `tel:`-Links in internationales Format umgewandelt: Die führende Ortsnetz-Null wird durch die Landesvorwahl `+49` ersetzt. E-Mail-Adressen erscheinen als `mailto:`-Links, Hinweise als kleiner grauer Text. Kontaktdaten und Öffnungszeiten sollten regelmäßig auf Aktualität geprüft werden.
