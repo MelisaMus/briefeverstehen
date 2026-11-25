@@ -1,4 +1,6 @@
 # Brief verstehen
+- [ ] Beratungsstellen-Datei ersetzen: wartet auf den angekündigten Anhang.
+- [x] E-Mail-Links, kleine Hinweise und internationale Telefonlinks ergänzen und mit Testkontakten prüfen.
 - [x] Dringend-Grund und übersetzbaren Hinweis ergänzen; Aktivierung und Datumskorrektur testen.
 - [x] Nicht wegklickbaren Hinweis ganz oben mit Vorlesen und konfigurierbaren Beratungsstellen anzeigen.
 - [x] Hinweis im PDF/Kopieren übernehmen und Mobil-/Desktopablauf prüfen. Ein Bild-Export besteht bisher nicht.

@@ -1,8 +1,8 @@
-import { TriangleAlert, MapPin, Phone, ExternalLink, Clock3 } from "lucide-react";
+import { TriangleAlert, MapPin, Phone, ExternalLink, Clock3, Mail } from "lucide-react";
 import { ResultCard } from "./result-card";
 import { adviceTitle } from "@/config/urgent-advice";
 import type { LanguageCode } from "@/config/languages";
-import type { AdviceService } from "@/lib/urgent-advice";
+import { internationalPhone, type AdviceService } from "@/lib/urgent-advice";
 
 export function UrgentAdviceNotice({ german, target, services, language, translating, showTranslation }: {
   german: string; target: string; services: AdviceService[]; language: LanguageCode; translating: boolean; showTranslation: boolean;
@@ -14,13 +14,15 @@ export function UrgentAdviceNotice({ german, target, services, language, transla
         {showTranslation && target && <p className="translation" lang={language} dir={language === "ar" ? "rtl" : "ltr"}>{target}</p>}
       </div>
       {services.length > 0 && <ul className="advice-services">{services.map((service, index) => {
-        const phone = service.telefon.replace(/[^+\d]/g, "");
+        const phone = internationalPhone(service.telefon);
         return <li key={`${service.name}-${index}`}>
           <strong>{service.name}</strong>
           {service.adresse && <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(service.adresse)}`} target="_blank" rel="noopener noreferrer"><MapPin size={19}/>{service.adresse}</a>}
           {phone && <a href={`tel:${phone}`}><Phone size={19}/>{service.telefon}</a>}
+          {service.email?.trim() && <a href={`mailto:${service.email.trim()}`}><Mail size={19}/>{service.email}</a>}
           {service.oeffnungszeiten && <p><Clock3 size={19}/>{service.oeffnungszeiten}</p>}
           {/^(https?:\/\/)/.test(service.link) && <a href={service.link} target="_blank" rel="noopener noreferrer"><ExternalLink size={19}/>{service.name}</a>}
+          {service.hinweis?.trim() && <small className="block text-sm leading-relaxed text-muted-foreground">{service.hinweis}</small>}
         </li>;
       })}</ul>}
     </ResultCard>

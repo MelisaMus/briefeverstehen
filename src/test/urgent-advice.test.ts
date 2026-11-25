@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { letterSchema } from "@/lib/letter-schema";
-import { urgentAdvice, matchingAdviceServices, preparedAdvice, type AdviceService } from "@/lib/urgent-advice";
+import { urgentAdvice, matchingAdviceServices, preparedAdvice, internationalPhone, type AdviceService } from "@/lib/urgent-advice";
 import { calculateDeadline, type CalculatedDeadline } from "@/lib/calculate-deadlines";
 import { adviceReasons } from "@/config/urgent-advice";
 import { sampleLetter } from "./letter-schema.test";
@@ -11,6 +11,20 @@ const residence: AdviceService = { name: "Test: Aufenthalt", thema: ["abschiebun
 const housing: AdviceService = { ...residence, name: "Test: Wohnung", thema: ["raeumung"] };
 
 describe("Dringende Beratung", () => {
+  it("wandelt deutsche Ortsnummern in internationale Telefonnummern um", () => {
+    expect(internationalPhone("0761 123456")).toBe("+49761123456");
+    expect(internationalPhone("0761 / 123-456")).toBe("+49761123456");
+  });
+  it("erhält internationale Nummern und entfernt optionale deutsche Amtsnull", () => {
+    expect(internationalPhone("+49 (0)761 123456")).toBe("+49761123456");
+    expect(internationalPhone("0049 761 123456")).toBe("+49761123456");
+    expect(internationalPhone("+41 44 1234567")).toBe("+41441234567");
+  });
+  it("erzeugt keine Telefonlinks aus Platzhaltern oder mehrdeutigen Nummern", () => {
+    expect(internationalPhone("Telefonnummer")).toBe("");
+    expect(internationalPhone("0761 123456 oder 0761 654321")).toBe("");
+    expect(internationalPhone("")).toBe("");
+  });
   it.each(adviceReasons)("aktiviert bei dringend_beratung für %s ohne Frist", reason => {
     const letter = { ...sampleLetter, dringend_beratung: true, dringend_grund: reason };
     expect(urgentAdvice(letter, [], today)?.reason).toBe(reason);

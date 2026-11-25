@@ -3,7 +3,15 @@ import { adviceTexts, adviceTitle, adviceBringLetter, adviceFallback, adviceThre
 import type { Letter } from "./letter-schema";
 import type { CalculatedDeadline } from "./calculate-deadlines";
 
-export type AdviceService = { name: string; thema: readonly string[]; adresse: string; telefon: string; oeffnungszeiten: string; link: string };
+export type AdviceService = { name: string; thema: readonly string[]; adresse: string; telefon: string; oeffnungszeiten: string; link: string; email?: string; hinweis?: string };
+export function internationalPhone(value: string): string {
+  let phone = value.trim().replace(/[\s()./–—-]/g, "");
+  if (phone.startsWith("0049")) phone = `+49${phone.slice(4)}`;
+  if (phone.startsWith("00")) phone = `+${phone.slice(2)}`;
+  if (phone.startsWith("+490")) phone = `+49${phone.slice(4)}`;
+  if (/^0[1-9]\d+$/.test(phone)) phone = `+49${phone.slice(1)}`;
+  return /^\+[1-9]\d{5,14}$/.test(phone) ? phone : "";
+}
 export function matchingAdviceServices(reason: AdviceReason, all: boolean, services: readonly AdviceService[] = entries): AdviceService[] {
   // The requested template is not a real recommendation or a usable contact.
   return services.filter(service => service.name.trim() && service.name !== "Name der Beratungsstelle" && (all || service.thema.includes(reason)));
