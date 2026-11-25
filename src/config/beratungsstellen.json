@@ -1,10 +1,102 @@
 [
   {
-    "name": "Name der Beratungsstelle",
-    "thema": ["abschiebung", "ausreise", "haft", "gericht", "inobhutnahme", "raeumung", "sonstiges"],
-    "adresse": "Adresse der Beratungsstelle",
-    "telefon": "Telefonnummer",
-    "oeffnungszeiten": "Öffnungszeiten",
-    "link": "Link zur Beratungsstelle"
+    "name": "SAGA – Südbadisches Aktionsbündnis gegen Abschiebungen (im Rasthaus)",
+    "thema": ["abschiebung", "ausreise", "haft"],
+    "adresse": "Adlerstraße 12, 79098 Freiburg",
+    "telefon": "0761 2088408",
+    "email": "saga@rasthaus-freiburg.org",
+    "oeffnungszeiten": "Aufenthaltsberatung mittwochs und freitags – genaue Uhrzeiten bitte vorher prüfen",
+    "link": "https://rasthaus-freiburg.org",
+    "hinweis": "Ehrenamtlich und kostenlos. Telefon hat Anrufbeantworter."
+  },
+  {
+    "name": "Roma Büro Freiburg e.V.",
+    "thema": ["abschiebung", "ausreise", "sonstiges"],
+    "adresse": "Ensisheimer Straße 20, 79110 Freiburg",
+    "telefon": "0175 9037476",
+    "email": "roma.buero.freiburg@t-online.de",
+    "oeffnungszeiten": "Bitte vorher anrufen",
+    "link": "https://www.roma-buero-freiburg.eu",
+    "hinweis": "Selbstorganisation, Beratung und Übersetzung."
+  },
+  {
+    "name": "Migrationsberatung (MBE) – Caritasverband Freiburg-Stadt",
+    "thema": ["abschiebung", "ausreise", "sonstiges"],
+    "adresse": "Sundgauallee 8, 79110 Freiburg",
+    "telefon": "0761 7903-2115",
+    "email": "migrationsberatung@caritas-freiburg.de",
+    "oeffnungszeiten": "Bitte vorher anrufen",
+    "link": "https://www.caritas-freiburg.de",
+    "hinweis": "Kostenlos und vertraulich."
+  },
+  {
+    "name": "Migrationsberatung (MBE) – Diakonisches Werk Freiburg",
+    "thema": ["abschiebung", "ausreise", "sonstiges"],
+    "adresse": "Ferdinand-Weiß-Straße 9, 79106 Freiburg",
+    "telefon": "0761 891538",
+    "email": "migration@diakonie-freiburg.de",
+    "oeffnungszeiten": "Bitte vorher anrufen",
+    "link": "https://www.diakonie-freiburg.de",
+    "hinweis": "Kostenlos und vertraulich."
+  },
+  {
+    "name": "Migrationsberatung (MBE) – Südwind Freiburg e.V.",
+    "thema": ["abschiebung", "ausreise", "sonstiges"],
+    "adresse": "Eschholzstraße 16, 79106 Freiburg",
+    "telefon": "0761 590361-17",
+    "email": "migrationsberatung@suedwind-freiburg.de",
+    "oeffnungszeiten": "Bitte vorher anrufen",
+    "link": "https://www.suedwind-freiburg.de",
+    "hinweis": "Kostenlos und vertraulich."
+  },
+  {
+    "name": "Migrationsberatung (MBE) – Deutsches Rotes Kreuz Freiburg",
+    "thema": ["abschiebung", "ausreise", "sonstiges"],
+    "adresse": "Rimsinger Weg 15, 79111 Freiburg",
+    "telefon": "0761 214176-94",
+    "email": "mbe@drk-freiburg.de",
+    "oeffnungszeiten": "Bitte vorher anrufen",
+    "link": "https://www.drk-freiburg.de",
+    "hinweis": "Kostenlos und vertraulich."
+  },
+  {
+    "name": "Flüchtlingsrat Baden-Württemberg (Telefonberatung)",
+    "thema": ["abschiebung", "ausreise"],
+    "adresse": "Hegelstraße 51, 70174 Stuttgart – keine Beratung vor Ort",
+    "telefon": "0711 5532834",
+    "email": "info@fluechtlingsrat-bw.de",
+    "oeffnungszeiten": "Telefonberatung Montag und Mittwoch 9:00–10:30 Uhr",
+    "link": "https://fluechtlingsrat-bw.de",
+    "hinweis": "Nur per Telefon und E-Mail. Keine Namen oder Aktenzeichen per E-Mail schicken."
+  },
+  {
+    "name": "Amtsgericht Freiburg – Rechtsantragstelle (Beratungshilfe)",
+    "thema": ["gericht", "haft", "raeumung", "sonstiges"],
+    "adresse": "Kaiser-Joseph-Straße 257a, 79098 Freiburg (Eingang über das Tor Kaiser-Joseph-Straße 257, Haltestelle Holzmarkt)",
+    "telefon": "0761 205-0",
+    "email": "poststelle@agfreiburg.justiz.bwl.de",
+    "oeffnungszeiten": "Öffnungszeiten der Rechtsantragstelle bitte vorher telefonisch erfragen",
+    "link": "https://amtsgericht-freiburg.justiz-bw.de",
+    "hinweis": "Hier gibt es den Beratungshilfeschein für eine Anwältin oder einen Anwalt bei wenig Einkommen. Ausweis, Einkommensnachweise und den Brief mitbringen."
+  },
+  {
+    "name": "Mieterverein Regio Freiburg e.V.",
+    "thema": ["raeumung"],
+    "adresse": "Marchstraße 1, 79106 Freiburg",
+    "telefon": "0761 202700",
+    "email": "info@mieterverein-regio-freiburg.de",
+    "oeffnungszeiten": "Montag bis Donnerstag 9:00–17:00 Uhr, Freitag 9:00–12:00 Uhr",
+    "link": "https://www.mieterverein-regio-freiburg.de",
+    "hinweis": "Beratung nur für Mitglieder (Mitgliedsbeitrag)."
+  },
+  {
+    "name": "Amt für Kinder, Jugend und Familie – Kommunaler Sozialer Dienst",
+    "thema": ["inobhutnahme"],
+    "adresse": "Europaplatz 1, 79098 Freiburg (Haltestelle Siegesdenkmal)",
+    "telefon": "0761 201-8601",
+    "email": "aki@stadt.freiburg.de",
+    "oeffnungszeiten": "Empfang Montag bis Donnerstag 7:30–16:30 Uhr, Freitag 7:30–15:30 Uhr",
+    "link": "https://www.freiburg.de",
+    "hinweis": "Ist das Jugendamt selbst Absender? Dann zusätzlich eine unabhängige Beratung (z.B. Roma Büro oder Migrationsberatung) einbeziehen."
   }
 ]

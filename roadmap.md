@@ -1,5 +1,5 @@
 # Brief verstehen
-- [ ] Beratungsstellen-Datei ersetzen: wartet auf den angekündigten Anhang.
+- [x] Beratungsstellen-Datei durch den Anhang mit zehn Einträgen ersetzen; Telefon-, E-Mail- und Kartenlinks im Briefablauf prüfen.
 - [x] E-Mail-Links, kleine Hinweise und internationale Telefonlinks ergänzen und mit Testkontakten prüfen.
 - [x] Dringend-Grund und übersetzbaren Hinweis ergänzen; Aktivierung und Datumskorrektur testen.
 - [x] Nicht wegklickbaren Hinweis ganz oben mit Vorlesen und konfigurierbaren Beratungsstellen anzeigen.

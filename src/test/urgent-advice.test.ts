@@ -62,7 +62,7 @@ describe("Dringende Beratung", () => {
   });
   it("behandelt leere Datei und Platzhalter nicht als echte Empfehlungen", () => {
     expect(matchingAdviceServices("sonstiges", true, [])).toEqual([]);
-    expect(matchingAdviceServices("sonstiges", true)).toEqual([]);
+    expect(matchingAdviceServices("sonstiges", true, [{ ...residence, name: "Name der Beratungsstelle" }])).toEqual([]);
   });
   it("bereitet auch für später korrigierte Fristen eine Übersetzung vor", () => {
     const prepared = preparedAdvice(sampleLetter);
