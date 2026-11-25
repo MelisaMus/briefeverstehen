@@ -4,7 +4,8 @@ Eine mobile-first Web-App für Dolmetscher:innen und Sozialarbeiter:innen, die d
 
 Die App erklärt Briefe in Leichtem Deutsch und auf Wunsch in einer weiteren Sprache. Große Schrift, klare Symbole und zweisprachige Ergebniskarten unterstützen die gemeinsame Besprechung. Die Nutzung erfordert keinen Login.
 
-**Web-App:** [briefeverstehen.lovable.app](https://briefeverstehen.lovable.app)  
+**Web-App:** [briefeverstehen.lovable.app](https://briefeverstehen.lovable.app)
+
 **Weiterentwicklung:** [Projekt in Lovable öffnen](https://lovable.dev/projects/2170c690-e4e8-4853-9d40-2c9f9007c0ec)
 
 ## Funktionen
