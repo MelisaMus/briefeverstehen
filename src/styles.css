@@ -79,6 +79,8 @@
   --color-soon-soft: var(--soon-soft);
   --color-safe: var(--safe);
   --color-safe-soft: var(--safe-soft);
+  --color-advice-critical: var(--advice-critical);
+  --color-advice-background: var(--advice-background);
 }
 
 :root {
@@ -107,6 +109,8 @@
   --paper-line: oklch(0.77 0.025 80);
   --urgent: oklch(0.48 0.16 26);
   --urgent-soft: oklch(0.964 0.017 26);
+  --advice-critical: oklch(0.43 0.16 26);
+  --advice-background: oklch(0.964 0.017 26);
   --soon: oklch(0.45 0.092 72);
   --soon-soft: oklch(0.968 0.038 85);
   --safe: oklch(0.41 0.10 145);
@@ -128,6 +132,8 @@
 }
 
 .dark {
+  --advice-critical: oklch(0.82 0.10 26);
+  --advice-background: oklch(0.24 0.035 26);
   color-scheme: dark;
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -264,6 +270,22 @@ button, input, textarea { font: inherit; }
 .footer-inner span { display: flex; gap: 7px; align-items: center; }
 .footer-inner .footer-brand { color: var(--foreground); font-weight: 500; }
 .result-main { padding-top: 28px; }
+.urgent-advice-region { margin-bottom: 28px; }
+.result-card.urgent-advice-notice { background: var(--advice-background); border: 2px solid var(--advice-critical); color: var(--foreground); }
+.urgent-advice-notice .result-card-header { align-items: flex-start; gap: 16px; }
+.urgent-advice-notice .card-icon { width: 48px; height: 48px; color: var(--advice-critical); background: transparent; }
+.urgent-advice-notice .card-icon svg { width: 42px; height: 42px; }
+.result-card.urgent-advice-notice h2 { font-size: 28px; line-height: 1.3; color: var(--advice-critical); overflow-wrap: anywhere; }
+.urgent-advice-notice .urgent-advice-copy p, .urgent-advice-notice .urgent-advice-copy .translation { font-size: 22px; line-height: 1.55; margin-top: 14px; }
+.urgent-advice-copy p:first-child { margin-top: 0; }
+.urgent-advice-notice .urgent-advice-copy .translation { color: var(--foreground); white-space: pre-line; border-color: var(--advice-critical); }
+.urgent-advice-notice .card-speech { background: transparent; border-color: var(--advice-critical); }
+.urgent-advice-notice .card-speech button { color: var(--advice-critical); min-height: 44px; font-size: 15px; }
+.advice-services { display: grid; gap: 20px; padding-top: 20px; margin-top: 20px; border-top: 1px solid var(--advice-critical); }
+.advice-services li { display: grid; gap: 8px; min-width: 0; font-size: 18px; overflow-wrap: anywhere; }
+.advice-services a, .advice-services li > p { display: flex; align-items: flex-start; gap: 8px; }
+.advice-services a { text-decoration: underline; text-underline-offset: 3px; }
+.advice-services svg { flex-shrink: 0; margin-top: 4px; }
 .result-topbar { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 25px; }
 .result-topbar .language-select { width: 235px; }
 .result-topbar > a { font-size: 13px; display: flex; align-items: center; gap: 7px; color: var(--muted-foreground); }
@@ -371,4 +393,7 @@ button, input, textarea { font: inherit; }
   .result-heading h1 { font-size: 25px; }
   .bilingual p { font-size: 14px; }
   .bilingual .translation { font-size: 12px; }
+  .urgent-advice-notice { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .result-card.urgent-advice-notice h2 { font-size: 25px; }
+  .urgent-advice-notice .urgent-advice-copy p, .urgent-advice-notice .urgent-advice-copy .translation { font-size: 18px; }
 }

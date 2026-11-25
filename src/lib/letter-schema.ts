@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { adviceReasons } from "@/config/urgent-advice";
 
 export const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).refine((value) => {
   const date = new Date(`${value}T12:00:00Z`);
@@ -23,7 +24,9 @@ export const letterSchema = z.object({
   termine: z.array(z.object({ datum: isoDate.nullable(), uhrzeit: z.string().regex(/^\d{2}:\d{2}$/).nullable(), ort: text, zweck_de: text, zweck_ziel: text })).max(40),
   unterlagen: z.array(z.object(pair)).max(60), warnungen: z.array(z.object(pair)).max(60),
   unsicherheiten: z.array(text).max(40), unsicherheiten_ziel: z.array(text).max(40), rechtsbehelf_vorhanden: z.boolean(), dringend_beratung: z.boolean(),
+  dringend_grund: z.enum(adviceReasons).nullable(), dringend_hinweis_de: text, dringend_hinweis_ziel: text,
 }).superRefine((letter, context) => {
+  if (letter.dringend_beratung === (letter.dringend_grund === null)) context.addIssue({ code: "custom", path: ["dringend_grund"], message: "Bei dringender Beratung Grund angeben, sonst null" });
   const ids = new Set<string>();
   letter.fristen.forEach((deadline, index) => {
     if (ids.has(deadline.id)) context.addIssue({ code: "custom", path: ["fristen", index, "id"], message: "Doppelte Frist" });
@@ -54,6 +57,7 @@ export function acceptTranslation(original: Letter, candidate: unknown): Letter 
   const pairs = [
     [original.absender, translated.absender_ziel], [original.briefart, translated.briefart_ziel],
     [original.zusammenfassung_de, translated.zusammenfassung_ziel],
+    [original.dringend_hinweis_de, translated.dringend_hinweis_ziel],
     ...original.todos.map((todo, index) => [todo.text_de, translated.todos[index]?.text_ziel ?? ""]),
     ...original.termine.map((item, index) => [item.zweck_de, translated.termine[index]?.zweck_ziel ?? ""]),
     ...original.unterlagen.map((item, index) => [item.de, translated.unterlagen[index]?.ziel ?? ""]),

@@ -1,12 +1,14 @@
 import type { Letter } from "./letter-schema";
 import type { CalculatedDeadline } from "./calculate-deadlines";
 import { formatDate } from "./deadlines";
+import { urgentAdvice } from "./urgent-advice";
 
 export const aiNotice = "Erstellt mit KI. Fehler sind möglich. Wichtige Fristen bitte immer im Original prüfen.";
 export const legalNotice = "Diese App erklärt Briefe. Sie ersetzt keine Rechtsberatung. Bei Widerspruch, Klage oder Aufenthaltsfragen: Beratungsstelle kontaktieren.";
 
-export function buildExportText(letter: Letter, target: Letter | null, letterDate: string, deadlines: CalculatedDeadline[]): string {
-  return ["Brief verstehen", `Von wem? ${letter.absender}`, target?.absender_ziel,
+export function buildExportText(letter: Letter, target: Letter | null, letterDate: string, deadlines: CalculatedDeadline[], today = new Date().toISOString().slice(0, 10)): string {
+  const advice = urgentAdvice(letter, deadlines, today);
+  return [advice?.german, advice ? target?.dringend_hinweis_ziel : "", ...advice?.services.flatMap(service => [service.name, service.adresse, service.telefon, service.oeffnungszeiten, service.link]) ?? [], "Brief verstehen", `Von wem? ${letter.absender}`, target?.absender_ziel,
     `Briefdatum laut Brief: ${letterDate ? formatDate(letterDate) : "nicht erkannt"}`,
     letter.briefart, target?.briefart_ziel, "Worum geht es?", letter.zusammenfassung_de, target?.zusammenfassung_ziel,
     "Was musst du tun?", ...letter.todos.flatMap((item, index) => [item.text_de, target?.todos[index]?.text_ziel]),

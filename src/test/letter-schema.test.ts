@@ -7,6 +7,7 @@ export const sampleLetter: Letter = {
   todos: [{ text_de: "3 Kontoauszüge senden.", text_ziel: "", frist_id: "f1", symbol: "senden" }],
   fristen: [{ id: "f1", typ: "relativ", datum: null, original_zitat: "innerhalb eines Monats nach Bekanntgabe", dauer: 1, einheit: "monate", bezug: "bekanntgabe" }],
   termine: [], unterlagen: [], warnungen: [], unsicherheiten: [], unsicherheiten_ziel: [], rechtsbehelf_vorhanden: false, dringend_beratung: false,
+  dringend_grund: null, dringend_hinweis_de: "", dringend_hinweis_ziel: "",
 };
 const translated: Letter = { ...sampleLetter, absender_ziel: "Jobcenter", briefart_ziel: "Documents", zusammenfassung_ziel: "Send bank statements for 3 months.", todos: [{ text_de: "3 Kontoauszüge senden.", text_ziel: "Send 3 bank statements.", frist_id: "f1", symbol: "senden" }] };
 

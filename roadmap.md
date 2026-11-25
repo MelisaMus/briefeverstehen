@@ -1,4 +1,7 @@
 # Brief verstehen
+- [x] Dringend-Grund und übersetzbaren Hinweis ergänzen; Aktivierung und Datumskorrektur testen.
+- [x] Nicht wegklickbaren Hinweis ganz oben mit Vorlesen und konfigurierbaren Beratungsstellen anzeigen.
+- [x] Hinweis im PDF/Kopieren übernehmen und Mobil-/Desktopablauf prüfen. Ein Bild-Export besteht bisher nicht.
 - [x] Neue Analyse- und Übersetzungsregeln übernehmen und mit erfundenem Brief prüfen.
 - [x] Echte Analyse und getrennte Übersetzung mit JSON-Prüfung und einmaliger Wiederholung bei ungültiger Ausgabe.
 - [x] Bilder lokal verkleinern, PDFs seitenweise rendern; keine Speicherung von Briefen oder Ergebnissen durch die App.

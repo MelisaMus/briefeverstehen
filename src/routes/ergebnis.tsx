@@ -17,6 +17,8 @@ import { calculateDeadline } from "@/lib/calculate-deadlines";
 import { daysUntil, deadlineTone, formatDate } from "@/lib/deadlines";
 import type { Letter } from "@/lib/letter-schema";
 import { buildExportText, buildCalendar, downloadFile } from "@/lib/letter-exports";
+import { UrgentAdviceNotice } from "@/components/urgent-advice-notice";
+import { urgentAdvice } from "@/lib/urgent-advice";
 
 export const Route = createFileRoute("/ergebnis")({
   validateSearch: (search: Record<string, unknown>) => ({ sprache: search["sprache"] === "de" ? "de" as const : getLanguage(search["sprache"]).code }),
@@ -66,13 +68,15 @@ function LetterResults({ letter, arrivalDate, today }: { letter: Letter; arrival
   const deadlines = letter.fristen.map((deadline) => calculateDeadline(deadline, { letterDate: briefDate || null, arrivalDate, delivery: letter.zustellart }));
   const card = { language, translating: showTranslation && translating, showTranslation };
   const bilingual = (de: string, ziel = "") => <Bilingual de={de} target={showTranslation ? ziel : ""} language={language}/>;
-  const text = buildExportText(letter, translated, briefDate, deadlines);
+  const advice = urgentAdvice(letter, deadlines, today);
+  const text = buildExportText(letter, translated, briefDate, deadlines, today);
   const uncertainty = !briefDate || deadlines.some((deadline) => deadline.uncertain);
   const symbols = { dokument: FileText, senden: Send, termin: CalendarDays, euro: Euro, telefon: Phone, pruefen: Search };
   const dateText = briefDate ? formatDate(briefDate) : "nicht erkannt";
   const labels = deadlineLabels[language];
 
   return <main className="page-main result-main fade-in">
+    {advice && <UrgentAdviceNotice german={advice.german} target={translated?.dringend_hinweis_ziel ?? ""} services={advice.services} {...card}/>}
     <div className="result-topbar"><Link to="/"><ArrowLeft size={17}/> Neuer Brief</Link><Select value={sprache} onValueChange={(code) => { void navigate({ to: "/ergebnis", search: { sprache: code === "de" ? "de" : getLanguage(code).code }, replace: true }); }}><SelectTrigger className="language-select" aria-label="Zielsprache"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="de">Nur Leichtes Deutsch</SelectItem>{languages.map((item) => <SelectItem key={item.code} value={item.code}>{item.label} · {item.native}</SelectItem>)}</SelectContent></Select></div>
     <div className="page-heading result-heading"><span className="eyebrow"><Mail size={15}/> Gemeinsam Klarheit finden</span><h1>Dein Brief, einfach erklärt.</h1><p>Das ist wichtig. Das sind deine nächsten Schritte.</p></div>
     <div className="result-date-band"><BriefDateField value={briefDate} original={letter.briefdatum ?? ""} onChange={setBriefDate}/><p className="text-sm text-muted-foreground mt-2">Ankunftsdatum: {formatDate(arrivalDate)}</p></div>

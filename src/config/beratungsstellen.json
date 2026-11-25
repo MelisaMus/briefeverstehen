@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Name der Beratungsstelle",
+    "thema": ["abschiebung", "ausreise", "haft", "gericht", "inobhutnahme", "raeumung", "sonstiges"],
+    "adresse": "Adresse der Beratungsstelle",
+    "telefon": "Telefonnummer",
+    "oeffnungszeiten": "Öffnungszeiten",
+    "link": "Link zur Beratungsstelle"
+  }
+]
