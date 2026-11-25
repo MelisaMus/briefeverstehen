@@ -1,23 +1,99 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, CalendarDays, Camera, Check, CheckCheck, FileCheck2, FileText, HeartHandshake, Info, Languages, LockKeyhole, Mail, MessageCircle, ShieldCheck, Type, Upload, X } from "lucide-react";
+import { toast } from "sonner";
+import { BriefShell } from "@/components/brief-shell";
+import { LanguagePicker } from "@/components/language-picker";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import type { LanguageCode } from "@/config/languages";
+import { localDateInput } from "@/lib/deadlines";
 
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({ meta: [
+    { title: "Brief hinzufügen | Brief verstehen" },
+    { name: "description", content: "Behördenbrief fotografieren, hochladen oder als Text einfügen. Layout-Vorschau von Brief verstehen für Fachkräfte und Familien." },
+    { property: "og:title", content: "Brief verstehen – Brief hinzufügen" },
+    { property: "og:description", content: "Gemeinsam Klarheit finden: Behördenbriefe in Leichtem Deutsch und neun weiteren Sprachen." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+function FilePreview({ file }: { file: File }) {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    if (!file.type.startsWith("image/")) return;
+    const objectUrl = URL.createObjectURL(file);
+    setUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
+  return url ? <img src={url} alt="Vorschau des ausgewählten Briefes"/> : <FileText size={27}/>;
+}
+
 function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+  const navigate = useNavigate();
+  const uploadRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const [files, setFiles] = useState<{ id: string; file: File }[]>([]);
+  const [textOpen, setTextOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [arrival, setArrival] = useState("");
+  const [language, setLanguage] = useState<LanguageCode>("ro");
+  const [dragging, setDragging] = useState(false);
+  useEffect(() => setArrival(localDateInput(new Date())), []);
+
+  function addFiles(list: FileList | File[]) {
+    const selected = Array.from(list);
+    const accepted = selected.filter((file) => file.type.startsWith("image/") || file.type === "application/pdf");
+    if (accepted.length !== selected.length) toast.info("Bitte wähle Bilder oder PDF-Dateien aus.");
+    setFiles((previous) => [...previous, ...accepted.map((file) => ({ id: crypto.randomUUID(), file }))]);
+  }
+
+  return <BriefShell>
+    <main className="page-main fade-in">
+      <div className="page-heading">
+        <span className="eyebrow"><Mail size={14}/> Ein Brief. Ein nächster Schritt.</span>
+        <h1>Was steht in deinem Brief?</h1>
+        <p>Verständlich auf Deutsch. Und in deiner Sprache.</p>
+      </div>
+      <div className="upload-layout">
+        <section className="upload-tool" aria-label="Brief hinzufügen">
+          <div className="privacy-notice"><ShieldCheck size={21}/><div><strong>Persönliche Daten schützen</strong>Namen, Adressen und Aktenzeichen wenn möglich abdecken.</div></div>
+          <div className={`drop-zone ${dragging ? "dragging" : ""}`} onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(event) => { event.preventDefault(); setDragging(false); addFiles(event.dataTransfer.files); }}>
+            <div className="document-art" aria-hidden="true"><span className="art-circle"/><span className="art-paper"><Mail/><i/><i/><i/></span><span className="art-check"><Check size={17}/></span></div>
+            <h2>Deinen Brief hinzufügen</h2>
+            <p>Ein Foto oder eine Datei genügt.</p>
+            <div className="upload-buttons">
+              <Button variant="action" size="touch" onClick={() => cameraRef.current?.click()}><Camera/> Brief fotografieren</Button>
+              <Button variant="upload" size="touch" onClick={() => uploadRef.current?.click()}><Upload/> Datei hochladen</Button>
+            </div>
+            <span className="file-types"><FileText size={13}/> Bilder oder PDF · auch mehrere Seiten</span>
+            <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden aria-label="Brief mit Kamera fotografieren" onChange={(event) => { if (event.target.files) addFiles(event.target.files); event.target.value = ""; }}/>
+            <input ref={uploadRef} type="file" accept="image/*,application/pdf" multiple hidden aria-label="Bilder oder PDF auswählen" onChange={(event) => { if (event.target.files) addFiles(event.target.files); event.target.value = ""; }}/>
+            {files.length > 0 && <div className="file-list" aria-live="polite">{files.map(({ id, file }) => <div className="file-row" key={id}><FilePreview file={file}/><div className="file-info"><strong>{file.name}</strong><span>{Math.max(1, Math.round(file.size / 1024))} KB · nur auf diesem Gerät</span></div><Button variant="ghost" size="icon" title="Datei entfernen" aria-label={`${file.name} entfernen`} onClick={() => setFiles((previous) => previous.filter((item) => item.id !== id))}><X/></Button></div>)}</div>}
+          </div>
+          <div className="text-toggle"><Button variant="ghost" onClick={() => setTextOpen(!textOpen)} aria-expanded={textOpen} aria-controls="letter-text"><Type size={15}/>{textOpen ? "Textfeld schließen" : "Lieber Text einfügen"}</Button></div>
+          {textOpen && <div className="text-entry" id="letter-text"><label className="field-label" htmlFor="text">Text aus dem Brief</label><Textarea id="text" value={text} onChange={(event) => setText(event.target.value)} placeholder="Den Text des Briefes hier einfügen …"/></div>}
+          <div className="form-settings">
+            <div><label className="field-label" htmlFor="arrival">Wann kam der Brief an?</label><div className="date-field"><CalendarDays size={19}/><Input id="arrival" type="date" value={arrival} onChange={(event) => setArrival(event.target.value)}/></div><p className="field-hint">Das Datum hilft bei den Fristen.</p></div>
+            <div><label className="field-label" htmlFor="language">In welcher Sprache?</label><LanguagePicker value={language} onChange={setLanguage}/><p className="field-hint">Leichtes Deutsch ist immer dabei.</p></div>
+          </div>
+          <Button variant="action" size="touch" className="preview-button" onClick={() => { void navigate({ to: "/ergebnis", search: { sprache: language } }); }}>{files.length > 0 || text.trim() ? "Mit Beispieldaten fortfahren" : "Beispiel ansehen"}<ArrowRight/></Button>
+          <p className="demo-notice"><Info size={14}/><span>Layout-Vorschau: Du siehst einen Beispielbrief. Deine Dateien werden noch nicht analysiert oder gesendet.</span></p>
+        </section>
+        <aside className="upload-aside">
+          <h2>Einfach. Schritt für Schritt.</h2>
+          <div className="explanation-step"><span className="aside-icon"><Camera size={20}/></span><div><strong>1. Brief hinzufügen</strong><p>Fotografieren, hochladen<br/>oder Text einfügen.</p></div></div>
+          <div className="explanation-step"><span className="aside-icon"><Languages size={20}/></span><div><strong>2. Sprache wählen</strong><p>Leichtes Deutsch und eine<br/>Sprache, die du verstehst.</p></div></div>
+          <div className="explanation-step"><span className="aside-icon"><CheckCheck size={20}/></span><div><strong>3. Klarheit bekommen</strong><p>Was ist wichtig? Was ist zu tun?<br/>Und bis wann?</p></div></div>
+          <div className="aside-divider"/>
+          <div className="aside-bottom"><HeartHandshake size={27} strokeWidth={1.5}/><div><strong>Für den nächsten Schritt.</strong><p>Gemeinsam mit Dolmetscher:innen<br/>und Sozialarbeiter:innen.</p></div><div className="letter-categories"><span><Mail size={12}/> Jobcenter</span><span><Mail size={12}/> Schule</span><span><Mail size={12}/> Behörden</span></div></div>
+        </aside>
+      </div>
+      <div className="trust-line"><span><LockKeyhole size={14}/> Keine Speicherung</span><span><FileCheck2 size={14}/> Kein Konto nötig</span><span><MessageCircle size={14}/> 9 Zielsprachen</span></div>
+    </main>
+  </BriefShell>;
 }
