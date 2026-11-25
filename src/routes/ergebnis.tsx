@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, CalendarDays, CheckCheck, Clock3, Copy, Download, FileText, Info, ListChecks, Mail, MapPin, MessageCircle, Printer, Send, ShieldCheck, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 import { BriefShell } from "@/components/brief-shell";
+import { BriefDateField } from "@/components/brief-date-field";
 import { Bilingual, ResultCard } from "@/components/result-card";
 import { LanguagePicker } from "@/components/language-picker";
 import { Button } from "@/components/ui/button";
@@ -36,12 +37,13 @@ function Results() {
   const navigate = useNavigate();
   const translated = translations[language];
   const [checked, setChecked] = useState<number[]>([]);
+  const [briefDate, setBriefDate] = useState(example.date);
   const [remaining, setRemaining] = useState<number | null>(null);
   useEffect(() => setRemaining(daysUntil(example.deadline, new Date())), []);
   const tone = remaining === null ? "soon" : deadlineTone(remaining);
   const cardProps = { language };
   const bilingual = (de: string, target: string) => <Bilingual de={de} target={target} language={language}/>;
-  const exportText = ["BEISPIEL – Brief verstehen", "Von wem? Jobcenter", german.summary, translated.summary,
+  const exportText = ["BEISPIEL – Brief verstehen", "Von wem? Jobcenter", `Briefdatum laut Brief: ${formatDate(briefDate)}${briefDate !== example.date ? " (von dir korrigiert)" : ""}`, german.summary, translated.summary,
     "Was musst du tun?", ...german.tasks.flatMap((task, index) => [task, translated.tasks[index] ?? ""]),
     `Spätestens: ${formatDate(example.deadline)}`, `Empfehlung: bis ${formatDate(recommendedDate(example.deadline))} erledigen`, translated.deadline,
     "Was brauchst du?", ...german.documents.flatMap((doc, index) => [doc, translated.documents[index] ?? ""]),
@@ -69,10 +71,11 @@ function Results() {
       <div className="example-banner"><Info size={19}/><div><strong>Beispielbrief vom Jobcenter.</strong> Alle Angaben sind Beispieldaten – keine Analyse deines Briefes. Deutsch + {getLanguage(language).label}.</div></div>
       <div className="results-grid">
         <div className="results-column">
-          <ResultCard {...cardProps} title="Von wem?" icon={Mail} germanText={`${example.sender}. ${example.category}. ${german.sender}`} translatedText={translated.sender}>
+          <ResultCard {...cardProps} title="Von wem?" icon={Mail} germanText={`${example.sender}. ${example.category}. ${german.sender} Briefdatum laut Brief: ${formatDate(briefDate)}.`} translatedText={translated.sender}>
             <div className="sender-name">Jobcenter</div>
             {bilingual("Bitte um Unterlagen", translated.sender)}
-            <div className="sender-meta"><span>Briefdatum: 23.11.2026</span><span>Aktenzeichen vorhanden</span></div>
+            <BriefDateField value={briefDate} original={example.date} onChange={setBriefDate}/>
+            <div className="sender-meta"><span>Aktenzeichen vorhanden</span></div>
           </ResultCard>
           <ResultCard {...cardProps} title="Worum geht es?" icon={MessageCircle} germanText={german.summary} translatedText={translated.summary}>{bilingual(german.summary, translated.summary)}</ResultCard>
           <ResultCard {...cardProps} title="Was musst du tun?" icon={ListChecks} germanText={german.tasks.join(" ")} translatedText={translated.tasks.join(" ")}>

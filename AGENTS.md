@@ -34,3 +34,4 @@ use the editor.
 - The current version is a frontend-only layout preview; hold selected documents in component memory and never send them to a server or persist them.
 - Render results on a separate TanStack route using clearly marked example data; uploaded documents must never be presented as analyzed.
 - Define all visual roles in the global design system and use shared page and result-card components to keep accessibility and bilingual presentation consistent.
+- Keep corrected letter dates in results-page memory and feed the shared date field, speech and exports from that state; fixed deadlines stay independent of letter-date corrections.

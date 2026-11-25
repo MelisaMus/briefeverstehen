@@ -78,7 +78,7 @@ function Index() {
           <div className="text-toggle"><Button variant="ghost" onClick={() => setTextOpen(!textOpen)} aria-expanded={textOpen} aria-controls="letter-text"><Type size={15}/>{textOpen ? "Textfeld schließen" : "Lieber Text einfügen"}</Button></div>
           {textOpen && <div className="text-entry" id="letter-text"><label className="field-label" htmlFor="text">Text aus dem Brief</label><Textarea id="text" value={text} onChange={(event) => setText(event.target.value)} placeholder="Den Text des Briefes hier einfügen …"/></div>}
           <div className="form-settings">
-            <div><label className="field-label" htmlFor="arrival">Wann kam der Brief an?</label><div className="date-field"><CalendarDays size={19}/><Input id="arrival" type="date" value={arrival} onChange={(event) => setArrival(event.target.value)}/></div><p className="field-hint">Das Datum hilft bei den Fristen.</p></div>
+            <div><label className="field-label" htmlFor="arrival">Wann kam der Brief an?</label><div className="date-field"><CalendarDays size={19}/><Input id="arrival" type="date" value={arrival} onChange={(event) => setArrival(event.target.value)}/></div><p className="field-hint">Ankunftsdatum, nicht das Datum auf dem Brief.</p></div>
             <div><label className="field-label" htmlFor="language">In welcher Sprache?</label><LanguagePicker value={language} onChange={setLanguage}/><p className="field-hint">Leichtes Deutsch ist immer dabei.</p></div>
           </div>
           <Button variant="action" size="touch" className="preview-button" onClick={() => { void navigate({ to: "/ergebnis", search: { sprache: language } }); }}>{files.length > 0 || text.trim() ? "Mit Beispieldaten fortfahren" : "Beispiel ansehen"}<ArrowRight/></Button>
