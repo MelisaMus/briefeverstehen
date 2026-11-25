@@ -1,4 +1,5 @@
 # Brief verstehen
+- [x] Neue Analyse- und Übersetzungsregeln übernehmen und mit erfundenem Brief prüfen.
 - [x] Echte Analyse und getrennte Übersetzung mit JSON-Prüfung und einmaliger Wiederholung bei ungültiger Ausgabe.
 - [x] Bilder lokal verkleinern, PDFs seitenweise rendern; keine Speicherung von Briefen oder Ergebnissen durch die App.
 - [x] Relative Fristen mit konfigurierbarer Bekanntgabe, Monatsregeln und bundesweiten Feiertagen berechnen.

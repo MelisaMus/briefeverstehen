@@ -22,7 +22,7 @@ export const letterSchema = z.object({
   fristen: z.array(deadlineSchema).max(40),
   termine: z.array(z.object({ datum: isoDate.nullable(), uhrzeit: z.string().regex(/^\d{2}:\d{2}$/).nullable(), ort: text, zweck_de: text, zweck_ziel: text })).max(40),
   unterlagen: z.array(z.object(pair)).max(60), warnungen: z.array(z.object(pair)).max(60),
-  unsicherheiten: z.array(text).max(40), unsicherheiten_ziel: z.array(text).max(40), rechtsbehelf_vorhanden: z.boolean(),
+  unsicherheiten: z.array(text).max(40), unsicherheiten_ziel: z.array(text).max(40), rechtsbehelf_vorhanden: z.boolean(), dringend_beratung: z.boolean(),
 }).superRefine((letter, context) => {
   const ids = new Set<string>();
   letter.fristen.forEach((deadline, index) => {
