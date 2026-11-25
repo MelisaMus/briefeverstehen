@@ -4,7 +4,7 @@
 - [x] Relative Fristen mit konfigurierbarer Bekanntgabe, Monatsregeln und bundesweiten Feiertagen berechnen.
 - [x] Echte Ergebnisse, korrigierbares Briefdatum, Zitate, Lade- und Fehlerzustände sowie Datenschutztexte.
 - [x] Tests und echte Bild/PDF-Analyse mit erfundenen Briefen auf Mobil- und Desktopansicht prüfen.
-- [ ] KI-Anfragen für echte Briefe freigeben: wartet auf Abschalten von „AI app context“, Verifikation ohne gespeicherte Payload und serverseitige Freigabe.
+- [x] KI-Anfragen für echte Briefe freigeben: „AI app context“ ausgeschaltet; neue Analyse- und Übersetzungsanfragen ohne verfügbare Inhalts-Payload geprüft; serverseitige Freigabe gesetzt.
 - [x] Briefdatum laut Brief getrennt anzeigen, korrigierbar machen und im Kopieren/PDF übernehmen.
 - [x] Datumskorrektur mobil prüfen; feste Beispielfrist unverändert lassen.
 - [x] Upload-Seite mit Kamera, Dateiauswahl, Text, Eingangsdatum und Sprache.
