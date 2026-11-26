@@ -1,8 +1,8 @@
 // Impressum-Angaben. Werte in [eckigen Klammern] sind Platzhalter und lösen im Entwicklungsmodus eine Warnung aus.
 export const legal = {
   anbieterName: "Melisa Mustafovic-Brüstle",
-  strasse: "[Straße Hausnummer]",
-  plzOrt: "[PLZ Ort]",
+  strasse: "Kaiserstuhlstraße 26",
+  plzOrt: "79106 Freiburg",
   email: "melisamustafovic@gmail.com",
   telefon: "[Telefonnummer]" as string | undefined,
   stand: "November 2026",

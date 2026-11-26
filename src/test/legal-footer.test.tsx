@@ -33,8 +33,17 @@ describe("Impressum", () => {
     await renderAt("/impressum", () => <ImpressumContent config={{ ...legal, telefon: "0761 123456" }}/>);
     expect(screen.getByRole("link", { name: "0761 123456" }).getAttribute("href")).toBe("tel:+49761123456");
   });
+  it("zeigt die eingetragene Anschrift", async () => {
+    await renderAt("/impressum", () => <ImpressumContent config={legal}/>);
+    expect(screen.getByText(/Kaiserstuhlstraße 26/)).toBeTruthy();
+    expect(screen.getByText(/79106 Freiburg/)).toBeTruthy();
+  });
   it("warnt im Entwicklungsmodus bei Platzhaltern", async () => {
-    await renderAt("/impressum", () => <ImpressumContent config={legal} dev/>);
-    expect(screen.getByRole("alert").textContent).toContain("strasse");
+    await renderAt("/impressum", () => <ImpressumContent config={{ ...legal, plzOrt: "[PLZ Ort]" }} dev/>);
+    expect(screen.getByRole("alert").textContent).toContain("plzOrt");
+  });
+  it("warnt nicht mehr, wenn Anschrift und E-Mail eingetragen sind", async () => {
+    await renderAt("/impressum", () => <ImpressumContent config={{ ...legal, telefon: undefined }} dev/>);
+    expect(screen.queryByRole("alert")).toBeNull();
   });
 });
