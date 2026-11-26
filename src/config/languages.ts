@@ -2,6 +2,8 @@ export const languages = [
   { code: "ro", label: "Rumänisch", native: "Română", speech: "ro-RO" },
   { code: "bg", label: "Bulgarisch", native: "Български", speech: "bg-BG" },
   { code: "sr", label: "Serbisch", native: "Srpski", speech: "sr-RS" },
+  { code: "hr", label: "Kroatisch", native: "Hrvatski", speech: "hr-HR" },
+  { code: "bs", label: "Bosnisch", native: "Bosanski", speech: "bs-BA" },
   { code: "mk", label: "Mazedonisch", native: "Македонски", speech: "mk-MK" },
   { code: "sq", label: "Albanisch", native: "Shqip", speech: "sq-AL" },
   { code: "tr", label: "Türkisch", native: "Türkçe", speech: "tr-TR" },
