@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import { LegalLinks } from "@/components/legal-links";
 import { LetterSessionProvider } from "@/components/letter-session";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -32,6 +33,7 @@ function NotFoundComponent() {
             Go home
           </Link>
         </div>
+        <div className="mt-8"><LegalLinks /></div>
       </div>
     </div>
   );
@@ -70,6 +72,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
             Go home
           </a>
         </div>
+        <div className="mt-8"><LegalLinks /></div>
       </div>
     </div>
   );

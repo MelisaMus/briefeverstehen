@@ -385,7 +385,7 @@ button, input, textarea { font: inherit; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 @media print {
-  .site-header, .steps, .site-footer, .result-topbar, .result-actions, .card-speech { display: none; }
+  .site-header, .steps, .site-footer, .legal-links, .result-topbar, .result-actions, .card-speech { display: none; }
   .page-main { padding: 0; max-width: none; }
   .results-grid { display: block; }
   .result-card { break-inside: avoid; margin-bottom: 14px; }
@@ -397,3 +397,17 @@ button, input, textarea { font: inherit; }
   .result-card.urgent-advice-notice h2 { font-size: 25px; }
   .urgent-advice-notice .urgent-advice-copy p, .urgent-advice-notice .urgent-advice-copy .translation { font-size: 18px; }
 }
+
+.legal-links { display: flex; gap: 20px; font-size: 16px; font-weight: 600; justify-content: center; }
+.legal-links a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; padding: 6px 2px; }
+.legal-links a:hover { color: var(--primary); }
+.legal-page { max-width: 760px; font-size: 19px; line-height: 1.65; }
+.legal-page h1 { font-size: 36px; font-weight: 700; margin: 22px 0 18px; }
+.legal-page h2 { font-size: 22px; font-weight: 700; margin: 28px 0 8px; }
+.legal-page address { font-style: normal; }
+.legal-page a { color: var(--primary); text-decoration: underline; overflow-wrap: anywhere; }
+.legal-page .legal-back { display: inline-flex; gap: 8px; align-items: center; font-weight: 600; margin: 8px 0; }
+.legal-stand { margin-top: 28px; color: var(--muted-foreground); }
+.legal-warning svg { flex-shrink: 0; }
+.legal-warning { display: flex; gap: 10px; align-items: flex-start; border: 2px solid var(--advice-critical); background: var(--advice-background); color: var(--advice-critical); border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-weight: 600; font-size: 16px; }
+@media print { .legal-links, .legal-back { display: none !important; } }

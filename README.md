@@ -132,6 +132,7 @@ Ein lokaler Entwicklungsserver verwendet nicht exakt dieselbe Laufzeit wie die v
 | `src/config/analysis.ts` | KI-Modell, Bekanntgabeparameter und technische Anfragegrenzen |
 | `src/config/urgent-advice.ts` | Dringlichkeitsgrenze und geprüfte Hinweistexte |
 | `src/config/beratungsstellen.json` | Beratungsstellen und Kontaktdaten |
+| `src/config/legal.ts` | Impressum-Angaben (Anbieter, Anschrift, Kontakt, Stand) |
 | `src/lib/analyze-letter.functions.ts` | Analyse und Übersetzung mit Datenschutzfreigabe |
 | `src/lib/letter-prompts.server.ts` | Analyse- und Übersetzungsregeln |
 | `src/lib/letter-schema.ts` | Briefschema und Prüfung der Übersetzung |
