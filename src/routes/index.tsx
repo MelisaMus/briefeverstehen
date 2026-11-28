@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
     { title: "Brief hinzufügen | Postkompass" },
     { name: "description", content: "Behördenbrief fotografieren, hochladen oder als Text einfügen und mit KI in Leichtem Deutsch und deiner Sprache erklären lassen." },
     { property: "og:title", content: "Postkompass – Brief hinzufügen" },
-    { property: "og:description", content: "Gemeinsam Klarheit finden: Behördenbriefe in Leichtem Deutsch und neun weiteren Sprachen." },
+    { property: "og:description", content: `Gemeinsam Klarheit finden: Behördenbriefe in Leichtem Deutsch und ${languages.length} weiteren Sprachen.` },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ] }),
@@ -138,7 +138,7 @@ function Index() {
           <div className="aside-bottom"><HeartHandshake size={27} strokeWidth={1.5}/><div><strong>Für den nächsten Schritt.</strong><p>Gemeinsam mit Dolmetscher:innen<br/>und Sozialarbeiter:innen.</p></div><div className="letter-categories"><span><Mail size={12}/> Jobcenter</span><span><Mail size={12}/> Schule</span><span><Mail size={12}/> Behörden</span></div></div>
         </aside>
       </div>
-      <div className="trust-line"><span><LockKeyhole size={14}/> Wir speichern deine Briefe nicht</span><span><FileCheck2 size={14}/> Kein Konto nötig</span><span><MessageCircle size={14}/> 9 Zielsprachen</span></div>
+      <div className="trust-line"><span><LockKeyhole size={14}/> Wir speichern deine Briefe nicht</span><span><FileCheck2 size={14}/> Kein Konto nötig</span><span><MessageCircle size={14}/> {languages.length} Zielsprachen</span></div>
     </main>
     {prepared && <LetterRedactor pages={prepared.pages} text={prepared.text} onCancel={() => setPrepared(null)} onSend={sendReviewed}/>}
   </BriefShell>;
