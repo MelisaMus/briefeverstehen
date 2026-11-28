@@ -48,6 +48,12 @@ Für die Analyse werden Brieftext und lokal vorbereitete Bilder vorübergehend a
 
 Vor dem Senden öffnet sich eine Prüfansicht. Dort werden Namen, Anschrift, Aktenzeichen und Unterschriften mit einem Rechteck überdeckt; die Schwärzung wird als undurchsichtige Fläche dauerhaft in neue Bildpixel geschrieben. Originale, PDF-Textebenen und unprüfte Seiten werden nicht versendet – nur die geschwärzten Bilder und ein von Hand bereinigter Text. Eingefügter Text muss in dieser Ansicht von Hand gelöscht werden.
 
+### Dienstleister und Datenschutzerklärung
+
+Die App läuft bei Lovable (Auftragsverarbeiter); Unterauftragnehmer sind unter anderem Cloudflare (Server-Laufzeit) und OpenAI (KI-Modell). Die Schrift DM Sans wird mit der App ausgeliefert, es werden keine Daten an Google Fonts übertragen. Die Besucherstatistik von Lovable arbeitet ohne Cookies.
+
+Die Datenschutzerklärung steht in `src/routes/datenschutz.tsx`. Drei Angaben sind dort noch als Platzhalter in eckigen Klammern offen: die Rechtsgrundlage für besondere Kategorien nach Art. 9 DSGVO (Briefe können z. B. Gesundheitsdaten enthalten), die Speicherdauer der Server-Protokolle und die Grundlage für Übermittlungen in die USA (laut Vertrag zur Auftragsverarbeitung mit Lovable).
+
 Kopierte, gedruckte oder heruntergeladene Ergebnisse liegen anschließend in der Verantwortung der nutzenden Person.
 
 ### Datenschutzfreigabe der KI
@@ -97,6 +103,7 @@ Die Impressum-Angaben (Anbieter, Anschrift, Kontakt, Stand) stehen in `src/confi
 - **Oberfläche:** React 19, TypeScript, Tailwind CSS 4 und gemeinsame UI-Komponenten
 - **Framework:** TanStack Start mit dateibasiertem TanStack Router und Vite
 - **Server:** TanStack-Serverfunktionen auf der von Lovable bereitgestellten Cloudflare-Worker-Laufzeit
+- **Schrift:** DM Sans, selbst ausgeliefert über `@fontsource/dm-sans`
 - **KI:** Lovable AI Gateway; Modell und Provider werden zentral konfiguriert
 - **Prüfung:** Zod für strukturierte KI-Ausgaben, Vitest und Testing Library für Tests
 - **Dokumente und Fristen:** PDF.js, date-fns und date-holidays
@@ -137,7 +144,7 @@ Ein lokaler Entwicklungsserver verwendet nicht exakt dieselbe Laufzeit wie die v
 | `src/routes/index.tsx` | Brief hinzufügen, schwärzen und Analyse starten |
 | `src/routes/ergebnis.tsx` | Ergebnisse, Übersetzung, Datumskorrektur und Aktionen |
 | `src/routes/impressum.tsx` | Impressum-Seite |
-| `src/routes/datenschutz.tsx` | Datenschutzerklärung (Platzhalter) |
+| `src/routes/datenschutz.tsx` | Datenschutzerklärung |
 | `src/components/letter-session.tsx` | Flüchtiger Sitzungszustand ohne Persistenz |
 | `src/components/letter-redactor.tsx` | Prüf- und Schwärzenansicht vor dem Senden |
 | `src/config/languages.ts` | Unterstützte Sprachen und Vorlesecodes |
