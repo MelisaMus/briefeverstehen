@@ -4,10 +4,10 @@ import { BackHome } from "@/components/impressum-content";
 
 export const Route = createFileRoute("/datenschutz")({
   head: () => ({ meta: [
-    { title: "Datenschutz | Brief verstehen" },
-    { name: "description", content: "Datenschutzerklärung von Brief verstehen." },
-    { property: "og:title", content: "Datenschutz – Brief verstehen" },
-    { property: "og:description", content: "Informationen zum Datenschutz bei Brief verstehen." },
+    { title: "Datenschutz | Postkompass" },
+    { name: "description", content: "Datenschutzerklärung von Postkompass." },
+    { property: "og:title", content: "Datenschutz – Postkompass" },
+    { property: "og:description", content: "Informationen zum Datenschutz bei Postkompass." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ] }),

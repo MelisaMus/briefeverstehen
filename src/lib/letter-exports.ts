@@ -8,7 +8,7 @@ export const legalNotice = "Diese App erklärt Briefe. Sie ersetzt keine Rechtsb
 
 export function buildExportText(letter: Letter, target: Letter | null, letterDate: string, deadlines: CalculatedDeadline[], today = new Date().toISOString().slice(0, 10)): string {
   const advice = urgentAdvice(letter, deadlines, today);
-  return [advice?.german, advice ? target?.dringend_hinweis_ziel : "", ...advice?.services.flatMap(service => [service.name, service.adresse, service.telefon, service.email, service.oeffnungszeiten, service.link, service.hinweis]) ?? [], "Brief verstehen", `Von wem? ${letter.absender}`, target?.absender_ziel,
+  return [advice?.german, advice ? target?.dringend_hinweis_ziel : "", ...advice?.services.flatMap(service => [service.name, service.adresse, service.telefon, service.email, service.oeffnungszeiten, service.link, service.hinweis]) ?? [], "Postkompass", `Von wem? ${letter.absender}`, target?.absender_ziel,
     `Briefdatum laut Brief: ${letterDate ? formatDate(letterDate) : "nicht erkannt"}`,
     letter.briefart, target?.briefart_ziel, "Worum geht es?", letter.zusammenfassung_de, target?.zusammenfassung_ziel,
     "Was musst du tun?", ...letter.todos.flatMap((item, index) => [item.text_de, target?.todos[index]?.text_ziel]),
@@ -33,7 +33,7 @@ function foldLine(line: string): string {
 
 export function buildCalendar(letter: Letter, deadlines: CalculatedDeadline[]): string {
   const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Brief verstehen//DE", "CALSCALE:GREGORIAN"];
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Postkompass//DE", "CALSCALE:GREGORIAN"];
   const addEvent = (date: string, title: string, description: string, time?: string | null, location?: string) => {
     lines.push("BEGIN:VEVENT", `UID:${crypto.randomUUID()}@brief-verstehen`, `DTSTAMP:${stamp}`,
       time ? `DTSTART:${date.replaceAll("-", "")}T${time.replace(":", "")}00` : `DTSTART;VALUE=DATE:${date.replaceAll("-", "")}`,

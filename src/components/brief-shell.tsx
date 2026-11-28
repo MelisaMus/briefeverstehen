@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Check, HeartHandshake, Mail, ShieldCheck } from "lucide-react";
+import { Check, Compass, HeartHandshake, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 import { LegalLinks } from "@/components/legal-links";
 
@@ -7,9 +7,9 @@ export function BriefShell({ children, result = false, steps = true }: { childre
   return <div className="app-shell">
     <header className="site-header">
       <div className="header-inner">
-        <Link to="/" className="brand" aria-label="Brief verstehen – Startseite">
-          <span className="brand-mark"><Mail strokeWidth={1.7} /></span>
-          <span>Brief <strong>verstehen</strong><span className="brand-caption">Weniger Fragezeichen. Mehr Klarheit.</span></span>
+        <Link to="/" className="brand" aria-label="Postkompass – Startseite">
+          <span className="brand-mark"><Compass strokeWidth={1.7} /></span>
+          <span><strong>Postkompass</strong><span className="brand-caption">Orientierung bei Behördenpost</span></span>
         </Link>
         <span className="header-note"><HeartHandshake size={19} /> Gemeinsam verstehen</span>
       </div>
@@ -21,7 +21,7 @@ export function BriefShell({ children, result = false, steps = true }: { childre
     </div>}
     {children}
     <footer className="site-footer">
-      <div className="footer-inner"><span className="footer-brand"><Mail size={18}/> Brief verstehen</span><span><ShieldCheck size={16}/> Wir speichern deine Briefe nicht</span><LegalLinks/><span>Mit Sorgfalt. Für Menschen.</span></div>
+      <div className="footer-inner"><span className="footer-brand"><Compass size={18}/> Postkompass</span><span><ShieldCheck size={16}/> Wir speichern deine Briefe nicht</span><LegalLinks/><span>Mit Sorgfalt. Für Menschen.</span></div>
     </footer>
   </div>;
 }

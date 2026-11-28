@@ -23,9 +23,9 @@ import { urgentAdvice } from "@/lib/urgent-advice";
 export const Route = createFileRoute("/ergebnis")({
   validateSearch: (search: Record<string, unknown>) => ({ sprache: search["sprache"] === "de" ? "de" as const : getLanguage(search["sprache"]).code }),
   head: () => ({ meta: [
-    { title: "Dein Brief, verständlich erklärt | Brief verstehen" },
+    { title: "Dein Brief, verständlich erklärt | Postkompass" },
     { name: "description", content: "Dein Behördenbrief in Leichtem Deutsch und deiner Sprache: Zusammenfassung, Aufgaben, Fristen und Termine. Erstellt mit KI, keine Rechtsberatung." },
-    { property: "og:title", content: "Brief verstehen – Dein Brief, verständlich erklärt" },
+    { property: "og:title", content: "Postkompass – Dein Brief, verständlich erklärt" },
     { property: "og:description", content: "Zweisprachige Erklärung mit Aufgaben, Unterlagen und überprüfbaren Fristen. Wir speichern deine Briefe nicht." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" },
   ] }), component: Results,

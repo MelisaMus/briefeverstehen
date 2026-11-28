@@ -17,9 +17,9 @@ import { requestConfig } from "@/config/analysis";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
-    { title: "Brief hinzufügen | Brief verstehen" },
+    { title: "Brief hinzufügen | Postkompass" },
     { name: "description", content: "Behördenbrief fotografieren, hochladen oder als Text einfügen und mit KI in Leichtem Deutsch und deiner Sprache erklären lassen." },
-    { property: "og:title", content: "Brief verstehen – Brief hinzufügen" },
+    { property: "og:title", content: "Postkompass – Brief hinzufügen" },
     { property: "og:description", content: "Gemeinsam Klarheit finden: Behördenbriefe in Leichtem Deutsch und neun weiteren Sprachen." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
