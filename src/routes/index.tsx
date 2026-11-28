@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { ArrowRight, ArrowUp, ArrowDown, CalendarDays, Camera, Check, CheckCheck, FileCheck2, FileText, HeartHandshake, Info, Languages, LoaderCircle, LockKeyhole, Mail, MessageCircle, ShieldCheck, Type, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { BriefShell } from "@/components/brief-shell";
-import { LanguagePicker } from "@/components/language-picker";
+import { LetterRedactor } from "@/components/letter-redactor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,6 +54,7 @@ function Index() {
   const [progress, setProgress] = useState("");
   const [error, setError] = useState("");
   const [dragging, setDragging] = useState(false);
+  const [prepared, setPrepared] = useState<{ pages: string[]; text: string } | null>(null);
   useEffect(() => { setArrival(localDateInput(new Date())); setSession(null); }, [setSession]);
 
   async function submit() {
@@ -63,15 +64,19 @@ function Index() {
     try {
       const { prepareLetter } = await import("@/lib/prepare-letter");
       const pages = await prepareLetter(files.map((item) => item.file), setProgress);
-      setProgress("Dein Brief wird gelesen und erklärt …");
-      const today = localDateInput(new Date());
-      const response = await analyze({ data: { pages, text: text.trim(), arrivalDate: arrival, today } });
-      if (!response.ok) { setError(response.message); return; }
-      setSession({ letter: response.letter, arrivalDate: arrival, today });
-      await navigate({ to: "/ergebnis", search: { sprache: translate ? language : "de" } });
+      setPrepared({ pages, text: text.trim() });
     } catch (failure) {
       setError(failure instanceof Error && /^(Das Bild|Die PDF|Der Brief ist zu groß|Bitte höchstens)/.test(failure.message) ? failure.message : "Die Anfrage konnte nicht abgeschlossen werden. Bitte erneut versuchen.");
     } finally { setBusy(false); setProgress(""); }
+  }
+
+  async function sendReviewed(pages: string[], cleanText: string) {
+    const today = localDateInput(new Date());
+    const response = await analyze({ data: { pages, text: cleanText, arrivalDate: arrival, today } });
+    if (!response.ok) throw new Error(response.message);
+    setText(""); setFiles([]);
+    setSession({ letter: response.letter, arrivalDate: arrival, today });
+    await navigate({ to: "/ergebnis", search: { sprache: translate ? language : "de" } });
   }
 
   function reorder(id: string, direction: -1 | 1) {
@@ -99,7 +104,7 @@ function Index() {
       </div>
       <div className="upload-layout">
         <section className="upload-tool" aria-label="Brief hinzufügen">
-          <div className="privacy-notice"><ShieldCheck size={21}/><div><strong>Persönliche Daten schützen</strong>Namen, Adressen und Aktenzeichen wenn möglich abdecken.</div></div>
+          <div className="privacy-notice"><ShieldCheck size={21}/><div><strong>Persönliche Daten schützen</strong>Namen, Adressen und Aktenzeichen wenn möglich abdecken. Vor dem Senden kannst du den Brief hier schwärzen.</div></div>
           <div className={`drop-zone ${dragging ? "dragging" : ""}`} onDragOver={(event) => { event.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(event) => { event.preventDefault(); setDragging(false); addFiles(event.dataTransfer.files); }}>
             <div className="document-art" aria-hidden="true"><span className="art-circle"/><span className="art-paper"><Mail/><i/><i/><i/></span><span className="art-check"><Check size={17}/></span></div>
             <h2>Deinen Brief hinzufügen</h2>
@@ -119,7 +124,7 @@ function Index() {
             <div><label className="field-label" htmlFor="arrival">Wann kam der Brief an?</label><div className="date-field"><CalendarDays size={19}/><Input id="arrival" type="date" value={arrival} onChange={(event) => setArrival(event.target.value)}/></div><p className="field-hint">Ankunftsdatum, nicht das Datum auf dem Brief.</p></div>
             <div><label className="field-label" htmlFor="language">In welcher Sprache?</label><Select value={translate ? language : "de"} onValueChange={(code) => { setTranslate(code !== "de"); if (code !== "de") setLanguage(getLanguage(code).code); }}><SelectTrigger disabled={busy} id="language" className="language-select" aria-label="Zielsprache"><SelectValue/></SelectTrigger><SelectContent><SelectItem value="de">Nur Leichtes Deutsch</SelectItem>{languages.map((item) => <SelectItem key={item.code} value={item.code}>{item.label} · {item.native}</SelectItem>)}</SelectContent></Select><p className="field-hint">Leichtes Deutsch ist immer dabei.</p></div>
           </div>
-          <Button disabled={busy || (!files.length && !text.trim())} variant="action" size="touch" className="preview-button" onClick={() => { void submit(); }}>{busy ? <LoaderCircle className="animate-spin"/> : <ArrowRight/>}{busy ? "Brief wird gelesen …" : "Brief verstehen"}</Button>
+          <Button disabled={busy || (!files.length && !text.trim())} variant="action" size="touch" className="preview-button" onClick={() => { void submit(); }}>{busy ? <LoaderCircle className="animate-spin"/> : <ShieldCheck/>}{busy ? "Brief wird vorbereitet …" : "Brief prüfen und schwärzen"}</Button>
           {busy && <p className="mt-3 text-sm text-primary" role="status">{progress}</p>}
           {error && <p role="alert" className="mt-3 text-sm leading-relaxed text-destructive">{error}</p>}
           <p className="demo-notice"><Info size={14}/><span>Der Brief wird zur KI-Verarbeitung gesendet. Wir speichern deine Briefe nicht.</span></p>
@@ -135,5 +140,6 @@ function Index() {
       </div>
       <div className="trust-line"><span><LockKeyhole size={14}/> Wir speichern deine Briefe nicht</span><span><FileCheck2 size={14}/> Kein Konto nötig</span><span><MessageCircle size={14}/> 9 Zielsprachen</span></div>
     </main>
+    {prepared && <LetterRedactor pages={prepared.pages} text={prepared.text} onCancel={() => setPrepared(null)} onSend={sendReviewed}/>}
   </BriefShell>;
 }

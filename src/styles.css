@@ -411,3 +411,20 @@ button, input, textarea { font: inherit; }
 .legal-warning svg { flex-shrink: 0; }
 .legal-warning { display: flex; gap: 10px; align-items: flex-start; border: 2px solid var(--advice-critical); background: var(--advice-background); color: var(--advice-critical); border-radius: 12px; padding: 14px 16px; margin: 12px 0; font-weight: 600; font-size: 16px; }
 @media print { .legal-links, .legal-back { display: none !important; } }
+
+:root { --redaction-surface: oklch(0.94 0.006 163); }
+.dark { --redaction-surface: oklch(0.24 0.006 163); }
+.redactor-dialog { width: calc(100% - 24px); max-width: 880px; max-height: calc(100dvh - 24px); display: flex; flex-direction: column; gap: 0; padding: 0; border-radius: 8px; overflow: hidden; }
+.redactor-header { padding: 20px 44px 16px 20px; border-bottom: 1px solid var(--border); }
+.redactor-body { padding: 16px 20px; overflow-y: auto; min-height: 0; }
+.redactor-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.redactor-toolbar strong { flex: 1; font-size: 16px; }
+.redactor-note { margin-bottom: 12px; font-size: 15px; line-height: 1.5; color: var(--muted-foreground); }
+.redactor-page { background: var(--redaction-surface); padding: 8px; }
+.redactor-canvas { display: block; width: 100%; height: auto; touch-action: none; cursor: crosshair; }
+.redactor-numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.redactor-numbers label { font-size: 13px; }
+.redactor-footer { padding: 12px 20px; display: grid; gap: 10px; border-top: 1px solid var(--border); background: var(--background); }
+.redactor-footer button { white-space: normal; }
+@media (max-width: 560px) { .redactor-dialog { width: calc(100% - 12px); max-height: calc(100dvh - 12px); } .redactor-header, .redactor-body, .redactor-footer { padding-left: 12px; padding-right: 12px; } .redactor-header { padding-right: 38px; } .redactor-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media print { .redactor-dialog { display: none !important; } }

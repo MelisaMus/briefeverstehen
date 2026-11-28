@@ -18,4 +18,4 @@
 - [x] Vorlesen, Checkliste, Kalender, Kopieren und PDF-Druck in der Vorschau.
 - [x] Mobil- und Desktopansicht sowie Beispielablauf prüfen.
 
-Nicht Teil dieses Auftrags: Schwärzen-Modus.
+- [x] Lokales Schwärzen von Fotos/PDFs und Bereinigen von Text vor jeder KI-Anfrage; übermittelte Bildpixel, Mobil-/Desktopablauf und 87 Tests geprüft.

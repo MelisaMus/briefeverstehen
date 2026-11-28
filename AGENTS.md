@@ -38,3 +38,4 @@ use the editor.
 - Feed corrected letter dates into pure deadline calculation, speech and exports from session state; relative deadlines recalculate while fixed deadlines remain independent of date corrections.
 - Gate both AI server functions on AI_CONTENT_LOGGING_DISABLED_VERIFIED until gateway payload capture is disabled and verified; zero provider retention alone does not disable gateway content logs.
 - Derive urgent advice from a shared pure function and configured text/contact data; translate its prepared text with the letter so corrected deadlines and exports stay consistent without another AI request.
+- Require local review before analysis; flatten redactions into fresh image pixels and send only reviewed images and edited text, never original files or PDF text layers, so covered content cannot reach the AI.
