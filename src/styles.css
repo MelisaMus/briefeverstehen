@@ -420,7 +420,11 @@ button, input, textarea { font: inherit; }
 .redactor-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
 .redactor-toolbar strong { flex: 1; font-size: 16px; }
 .redactor-note { margin-bottom: 12px; font-size: 15px; line-height: 1.5; color: var(--muted-foreground); }
-.redactor-page { background: var(--redaction-surface); padding: 8px; }
+.redactor-howto { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 16px; font-weight: 600; line-height: 1.45; color: var(--foreground); }
+.redactor-howto svg { flex-shrink: 0; margin-top: 2px; color: var(--primary); }
+.redactor-review-hint { font-size: 15px; line-height: 1.45; color: var(--muted-foreground); }
+.redactor-page { position: relative; background: var(--redaction-surface); padding: 8px; }
+.redactor-hint { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; max-width: calc(100% - 24px); padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--card-foreground); box-shadow: var(--shadow-tool); font-size: 14px; pointer-events: none; z-index: 1; }
 .redactor-canvas { display: block; width: 100%; height: auto; touch-action: none; cursor: crosshair; }
 .redactor-numbers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
 .redactor-numbers label { font-size: 13px; }

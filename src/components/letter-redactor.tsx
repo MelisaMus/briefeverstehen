@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent } from "react";
-import { ArrowLeft, ArrowRight, Check, LoaderCircle, ShieldCheck, Undo2, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, LoaderCircle, ShieldCheck, SquareDashed, Undo2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,7 +35,7 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
     let active = true;
     let loaded: ImageBitmap | null = null;
     setReadySource(""); setDraft(null); start.current = null;
-    void fetch(source).then((response) => response.blob()).then(createImageBitmap).then((image) => {
+    void fetch(source).then((response) => response.blob()).then((blob) => createImageBitmap(blob)).then((image) => {
       loaded = image;
       if (!active) { image.close(); return; }
       bitmap.current = image;
@@ -104,10 +104,13 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
             <Button variant="ghost" size="icon" title="Schwärzungen dieser Seite löschen" aria-label="Schwärzungen dieser Seite löschen" disabled={busy || !currentMasks?.length} onClick={() => updateMasks([])}><Trash2/></Button>
           </>}
         </div>
-        {onText ? <><label htmlFor="clean-letter-text" className="field-label">Text ohne persönliche Daten</label><Textarea id="clean-letter-text" className="min-h-64" disabled={busy} maxLength={requestConfig.maxTextCharacters} value={cleanText} onChange={(event) => { setCleanText(event.target.value); setTextReviewed(false); }}/></> : <>
+        {onText ? <><p className="redactor-note">Namen, Anschrift und Aktenzeichen aus dem Text löschen. Briefdatum, Fristen und Inhalt lesbar lassen.</p><label htmlFor="clean-letter-text" className="field-label">Text ohne persönliche Daten</label><Textarea id="clean-letter-text" className="min-h-64" disabled={busy} maxLength={requestConfig.maxTextCharacters} value={cleanText} onChange={(event) => { setCleanText(event.target.value); setTextReviewed(false); }}/></> : <>
+          <p className="redactor-howto"><SquareDashed size={17}/> Mit dem Finger oder der Maus ein Rechteck über die Stelle ziehen.</p>
           <p className="redactor-note">Namen, Anschrift, Aktenzeichen und Unterschriften abdecken. Briefdatum, Fristen und Inhalt lesbar lassen.</p>
+          <p className="redactor-note">Der schwarze Bereich wird vor dem Senden fest ins Bild geschrieben.</p>
           <div className="redactor-page">
             {!ready && <p role="status">Seite wird geöffnet …</p>}
+            {ready && !currentMasks?.length && <p className="redactor-hint"><SquareDashed size={15}/> Hier ein Rechteck ziehen</p>}
             <canvas ref={canvasRef} aria-label="Briefseite zum Schwärzen" className="redactor-canvas" onPointerDown={(event) => {
               if (!ready || busy || event.button !== 0 || !event.isPrimary) return;
               event.currentTarget.setPointerCapture(event.pointerId); start.current = point(event);
@@ -127,6 +130,7 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
           <Button variant="soft" disabled={busy || (!onText && !ready)} onClick={markReviewed}><Check/>{onText ? "Text geprüft" : "Seite geprüft"}</Button>
           <span className="text-sm text-muted-foreground" aria-live="polite">{reviewed.length} / {pages.length} Seiten geprüft{text.trim() ? ` · Text ${textReviewed ? "geprüft" : "offen"}` : ""}</span>
         </div>
+        {!canSend && !busy && <p className="redactor-review-hint">{onText ? "Bitte erst den Text prüfen – dann kannst du senden." : "Bitte erst jede Seite prüfen – dann kannst du senden."}</p>}
         <Button variant="action" size="touch" className="w-full" disabled={!canSend || busy} onClick={() => { void send(); }}>{busy ? <LoaderCircle className="animate-spin"/> : <ShieldCheck/>}{busy ? "Brief wird verarbeitet …" : "Geprüften Brief senden"}</Button>
       </footer>
     </DialogContent>

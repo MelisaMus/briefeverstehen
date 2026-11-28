@@ -18,4 +18,4 @@
 - [x] Vorlesen, Checkliste, Kalender, Kopieren und PDF-Druck in der Vorschau.
 - [x] Mobil- und Desktopansicht sowie Beispielablauf prüfen.
 
-- [x] Lokales Schwärzen von Fotos/PDFs und Bereinigen von Text vor jeder KI-Anfrage; übermittelte Bildpixel, Mobil-/Desktopablauf und 87 Tests geprüft.
+- [x] Lokales Schwärzen von Fotos/PDFs und Bereinigen von Text vor jeder KI-Anfrage; übermittelte Bildpixel, Mobil-/Desktopablauf und 87 Tests geprüft.- [x] Schwärzungs-Ansicht erklären: Griff-Hinweis, Hinweis auf feste Schwärzung und Pflicht zur Seitenprüfung; mit erfundenem Brief geprüft.

@@ -28,4 +28,17 @@ describe("Text vor der KI-Anfrage bereinigen", () => {
     expect(cancel).toHaveBeenCalledOnce();
     expect(send).not.toHaveBeenCalled();
   });
+  it("erklärt, wie geschwärzt wird und dass erst geprüft werden muss", () => {
+    render(<LetterRedactor pages={["data:image/png;base64,iVBORw0KGgo="]} text="" onCancel={vi.fn()} onSend={vi.fn()}/>);
+    expect(screen.getByText(/Mit dem Finger oder der Maus ein Rechteck über die Stelle ziehen/)).toBeInTheDocument();
+    expect(screen.getByText(/Bitte erst jede Seite prüfen/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Geprüften Brief senden" })).toBeDisabled();
+  });
+  it("erklärt die Prüfung für eingefügten Text und verschwindet nach der Prüfung", () => {
+    render(<LetterRedactor pages={[]} text="Name: Fiktive Person." onCancel={vi.fn()} onSend={vi.fn()}/>);
+    expect(screen.getByText(/Namen, Anschrift und Aktenzeichen aus dem Text löschen/)).toBeInTheDocument();
+    expect(screen.getByText(/Bitte erst den Text prüfen/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Text geprüft" }));
+    expect(screen.queryByText(/Bitte erst den Text prüfen/)).not.toBeInTheDocument();
+  });
 });
