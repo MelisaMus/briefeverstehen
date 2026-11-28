@@ -1,6 +1,8 @@
-# Brief verstehen
+# Postkompass
 
-**Behördenbriefe in Leichtem Deutsch und in der Sprache der Familie – mit Fristen und To-dos auf einen Blick.**
+**Orientierung bei Behördenpost.**
+
+Behördenbriefe in Leichtem Deutsch und in der Sprache der Familie – mit Fristen und To-dos auf einen Blick.
 
 🔗 Web-App: [briefeverstehen.lovable.app](https://briefeverstehen.lovable.app)
 
@@ -12,11 +14,12 @@
 
 Viele Familien, die wenig Deutsch sprechen, bekommen Briefe von Jobcenter, Ausländerbehörde, Schule oder Krankenkasse – und verstehen nicht, was darin steht, was sie tun müssen und bis wann. Oft verstreichen Fristen, obwohl Hilfe möglich gewesen wäre.
 
-**Brief verstehen** ist aus der Praxis einer Dolmetscherin entstanden, die regelmäßig für Roma-Familien übersetzt. Die mobile-first Web-App unterstützt Fachkräfte – Sozialarbeit, Rechts- und Migrationsberatung, Dolmetschen, Familienhilfe – dabei, Behördenbriefe gemeinsam mit Familien zu verstehen. Große Schrift, klare Symbole und zweisprachige Ergebniskarten unterstützen die gemeinsame Besprechung. Die Nutzung erfordert keinen Login.
+**Postkompass** ist aus der Praxis einer Dolmetscherin entstanden, die regelmäßig für Roma-Familien übersetzt. Die mobile-first Web-App unterstützt Fachkräfte – Sozialarbeit, Rechts- und Migrationsberatung, Dolmetschen, Familienhilfe – dabei, Behördenbriefe gemeinsam mit Familien zu verstehen. Große Schrift, klare Symbole und zweisprachige Ergebniskarten unterstützen die gemeinsame Besprechung. Die Nutzung erfordert keinen Login.
 
 ## Funktionen
 
 - Brief fotografieren, Bilder oder PDF hochladen oder Brieftext einfügen; mehrere Seiten in der richtigen Reihenfolge verarbeiten.
+- Vor dem Senden schwärzen: Mit dem Finger oder der Maus ein Rechteck über Namen, Anschrift, Aktenzeichen und Unterschriften ziehen. Die Schwärzung wird vor dem Versand fest in die Bildpixel geschrieben; erst nach bestätigter Prüfung jeder Seite geht der Brief an die KI.
 - Ankunftsdatum und Zielsprache auswählen; alternativ nur Leichtes Deutsch anzeigen.
 - Zuerst die deutsche Erklärung erhalten, anschließend die Übersetzung in einer getrennten KI-Anfrage.
 - Absender, Briefart, Zusammenfassung, Aufgaben, Unterlagen, Fristen, Termine, Warnungen und Unsicherheiten anzeigen.
@@ -26,7 +29,7 @@ Viele Familien, die wenig Deutsch sprechen, bekommen Briefe von Jobcenter, Ausl�
 
 ### Unterstützte Sprachen
 
-Leichtes Deutsch sowie Rumänisch, Bulgarisch, Serbisch, Mazedonisch, Albanisch, Türkisch, Arabisch, Ukrainisch und Englisch. Für Arabisch wird die Schreibrichtung angepasst. Die verfügbaren Vorlesestimmen hängen vom Browser und Gerät ab. Die Sprachliste ist in `src/config/languages.ts` konfigurierbar.
+Leichtes Deutsch sowie Rumänisch, Bulgarisch, Serbisch, Kroatisch, Bosnisch, Mazedonisch, Albanisch, Türkisch, Arabisch, Ukrainisch und Englisch – insgesamt elf Zielsprachen. Für Arabisch wird die Schreibrichtung angepasst. Die verfügbaren Vorlesestimmen hängen vom Browser und Gerät ab. Die Sprachliste ist in `src/config/languages.ts` konfigurierbar.
 
 ## Grundsätze
 
@@ -41,7 +44,11 @@ Leichtes Deutsch sowie Rumänisch, Bulgarisch, Serbisch, Mazedonisch, Albanisch,
 
 Für die Analyse werden Brieftext und lokal vorbereitete Bilder vorübergehend an serverseitige Funktionen und den KI-Dienst übermittelt. Bilder werden vor dem Versand lokal verkleinert; PDFs werden im Browser seitenweise als Bilder aufbereitet. Die App protokolliert keine Briefinhalte und setzt für die KI-Antworten `Cache-Control: no-store`.
 
-Vor dem Hochladen gilt: **Namen, Adressen und Aktenzeichen wenn möglich abdecken.** Ein eingebauter Schwärzen-Modus und ein Bild-Export sind derzeit nicht vorhanden. Kopierte, gedruckte oder heruntergeladene Ergebnisse liegen anschließend in der Verantwortung der nutzenden Person.
+### Schwärzen auf dem eigenen Gerät
+
+Vor dem Senden öffnet sich eine Prüfansicht. Dort werden Namen, Anschrift, Aktenzeichen und Unterschriften mit einem Rechteck überdeckt; die Schwärzung wird als undurchsichtige Fläche dauerhaft in neue Bildpixel geschrieben. Originale, PDF-Textebenen und unprüfte Seiten werden nicht versendet – nur die geschwärzten Bilder und ein von Hand bereinigter Text. Eingefügter Text muss in dieser Ansicht von Hand gelöscht werden.
+
+Kopierte, gedruckte oder heruntergeladene Ergebnisse liegen anschließend in der Verantwortung der nutzenden Person.
 
 ### Datenschutzfreigabe der KI
 
@@ -82,6 +89,8 @@ Die Beratungsstellen für den Dringend-Hinweis stehen in `src/config/beratungsst
 - Deutsche Telefonnummern werden für anklickbare `tel:`-Links automatisch ins internationale Format (`+49 …`) umgewandelt. E-Mail-Adressen erscheinen als `mailto:`-Links, Hinweise als kleiner grauer Text.
 
 Bitte nur geprüfte Kontaktdaten eintragen und regelmäßig aktualisieren – eine falsche Telefonnummer ist im Ernstfall schlimmer als keine.
+
+Die Impressum-Angaben (Anbieter, Anschrift, Kontakt, Stand) stehen in `src/config/legal.ts`. Solange dort ein Feld einen Platzhalter in eckigen Klammern enthält, zeigt die Vorschau einen Entwicklungshinweis; auf der veröffentlichten Seite ist dieser Hinweis nicht sichtbar.
 
 ## Technik
 
@@ -125,9 +134,12 @@ Ein lokaler Entwicklungsserver verwendet nicht exakt dieselbe Laufzeit wie die v
 
 | Datei / Verzeichnis | Zweck |
 | --- | --- |
-| `src/routes/index.tsx` | Brief hinzufügen und Analyse starten |
+| `src/routes/index.tsx` | Brief hinzufügen, schwärzen und Analyse starten |
 | `src/routes/ergebnis.tsx` | Ergebnisse, Übersetzung, Datumskorrektur und Aktionen |
+| `src/routes/impressum.tsx` | Impressum-Seite |
+| `src/routes/datenschutz.tsx` | Datenschutzerklärung (Platzhalter) |
 | `src/components/letter-session.tsx` | Flüchtiger Sitzungszustand ohne Persistenz |
+| `src/components/letter-redactor.tsx` | Prüf- und Schwärzenansicht vor dem Senden |
 | `src/config/languages.ts` | Unterstützte Sprachen und Vorlesecodes |
 | `src/config/analysis.ts` | KI-Modell, Bekanntgabeparameter und technische Anfragegrenzen |
 | `src/config/urgent-advice.ts` | Dringlichkeitsgrenze und geprüfte Hinweistexte |
@@ -136,6 +148,7 @@ Ein lokaler Entwicklungsserver verwendet nicht exakt dieselbe Laufzeit wie die v
 | `src/lib/analyze-letter.functions.ts` | Analyse und Übersetzung mit Datenschutzfreigabe |
 | `src/lib/letter-prompts.server.ts` | Analyse- und Übersetzungsregeln |
 | `src/lib/letter-schema.ts` | Briefschema und Prüfung der Übersetzung |
+| `src/lib/redact-letter.ts` | Schwärzungen in neue Bildpixel schreiben |
 | `src/lib/calculate-deadlines.ts` | Relative und feste Fristen |
 | `src/lib/urgent-advice.ts` | Gemeinsame Logik für Dringend-Hinweis und Kontaktwahl |
 | `src/lib/letter-exports.ts` | Kopiertext und Kalenderexport |
@@ -161,6 +174,8 @@ Gerne als [Issue](../../issues) oder per E-Mail.
 
 Melisa Mustafovic-Brüstle · [melisamustafovic@gmail.com](mailto:melisamustafovic@gmail.com)
 
+Postkompass ist ein nicht-kommerzielles Projekt. Die Angaben gemäß § 5 DDG stehen im Impressum der App.
+
 ## Lizenz
 
 Dieses Projekt steht unter der [MIT-Lizenz](LICENSE). Der Code darf frei genutzt, verändert und weitergegeben werden – auch für eigene Städte und Träger –, solange der Lizenzhinweis erhalten bleibt. Die Software wird ohne Gewährleistung bereitgestellt.
@@ -169,9 +184,11 @@ Dieses Projekt steht unter der [MIT-Lizenz](LICENSE). Der Code darf frei genutzt
 
 ## English summary
 
-**Brief verstehen** ("Understand your letter") is a mobile-first web app that helps social workers, legal and migration counsellors, and interpreters explain German official letters to families with limited German. It was created by an interpreter who regularly works with Roma families.
+**Postkompass** ("letter compass") is a mobile-first web app that helps social workers, legal and migration counsellors, and interpreters explain German official letters to families with limited German. It was created by an interpreter who regularly works with Roma families.
 
-Photograph, upload or paste a letter, and the app returns a structured explanation in **Easy German** plus an optional **second language** (Romanian, Bulgarian, Serbian, Macedonian, Albanian, Turkish, Arabic, Ukrainian, English): sender, summary, tasks, required documents, appointments, warnings, uncertainties and **deadlines**.
+Photograph, upload or paste a letter, and the app returns a structured explanation in **Easy German** plus an optional **second language** (Romanian, Bulgarian, Serbian, Croatian, Bosnian, Macedonian, Albanian, Turkish, Arabic, Ukrainian, English): sender, summary, tasks, required documents, appointments, warnings, uncertainties and **deadlines**.
+
+Before anything is sent, personal details can be **redacted on the device**: drag a rectangle over names, addresses, file numbers and signatures, and the black area is burned into fresh image pixels. Only reviewed pages and manually cleaned text leave the browser.
 
 Key design choices: the AI explains, but **deadlines are calculated in code**, not estimated by the model; every deadline shows the **verbatim quote** from the letter; translations are checked so that dates, amounts and facts stay unchanged; **no letters are stored**, and the AI features stay locked until gateway content logging has been verified as disabled; an **urgent notice** links to local counselling services when residence, court, housing or child welfare is at stake. Counselling services are configured in `src/config/beratungsstellen.json` (included: Freiburg im Breisgau), so the app can be adapted to any city.
 
