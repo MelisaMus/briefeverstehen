@@ -6,10 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { allReviewed, paintRedactions, redactPage, redactionBetween, type Point, type Redaction } from "@/lib/redact-letter";
 import { requestConfig } from "@/config/analysis";
+import { LetterConsent, type ConsentOwner } from "./letter-consent";
+import type { LanguageCode } from "@/config/languages";
 
-type Props = { pages: string[]; text: string; onCancel: () => void; onSend: (pages: string[], text: string) => Promise<void> };
+type Props = { pages: string[]; text: string; language?: LanguageCode | "de"; onCancel: () => void; onSend: (pages: string[], text: string) => Promise<void> };
 
-export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
+export function LetterRedactor({ pages, text, language = "ro", onCancel, onSend }: Props) {
   const [pageIndex, setPageIndex] = useState(0);
   const [masks, setMasks] = useState<Record<number, Redaction[]>>({});
   const [reviewed, setReviewed] = useState<number[]>([]);
@@ -18,6 +20,9 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
   const [draft, setDraft] = useState<Redaction | null>(null);
   const [readySource, setReadySource] = useState("");
   const [busy, setBusy] = useState(false);
+  const [owner, setOwner] = useState<ConsentOwner>("");
+  const [accepted, setAccepted] = useState(false);
+  const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [numeric, setNumeric] = useState({ x: 10, y: 10, width: 40, height: 10 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,7 +33,8 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
   const onText = !source;
   const currentMasks = masks[pageIndex];
   const ready = !!source && readySource === source;
-  const canSend = allReviewed(pages.length, reviewed, !!text.trim(), textReviewed) && (pages.length > 0 || !!cleanText.trim());
+  const reviewComplete = allReviewed(pages.length, reviewed, !!text.trim(), textReviewed) && (pages.length > 0 || !!cleanText.trim());
+  const canSend = reviewComplete && owner !== "" && accepted && !sent;
 
   useEffect(() => {
     if (!source) return;
@@ -83,6 +89,7 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
       for (const [index, page] of pages.entries()) sanitized.push(await redactPage(page, masks[index] ?? []));
       if (sanitized.reduce((sum, page) => sum + page.length, 0) > requestConfig.maxEncodedCharacters) throw new Error("Der Brief ist zu groß. Bitte weniger Seiten auswählen.");
       await onSend(sanitized, cleanText.trim());
+      setOwner(""); setAccepted(false); setSent(true);
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : "Der Brief konnte nicht gesendet werden. Bitte erneut versuchen.");
     } finally { sending.current = false; setBusy(false); }
@@ -122,6 +129,7 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
             <Button className="mt-2" variant="soft" disabled={!ready || busy || numeric.width <= 0 || numeric.height <= 0} onClick={() => updateMasks([...(currentMasks ?? []), redactionBetween({ x: numeric.x / 100, y: numeric.y / 100 }, { x: (numeric.x + numeric.width) / 100, y: (numeric.y + numeric.height) / 100 })])}>Bereich schwärzen</Button>
           </details>
         </>}
+        {reviewComplete && !sent && <LetterConsent owner={owner} accepted={accepted} disabled={busy} language={language} onOwnerChange={(next) => { setOwner(next); setAccepted(false); }} onAcceptedChange={setAccepted}/>}
         {error && <p role="alert" className="mt-3 text-destructive">{error}</p>}
       </div>
       <footer className="redactor-footer">
@@ -130,8 +138,9 @@ export function LetterRedactor({ pages, text, onCancel, onSend }: Props) {
           <Button variant="soft" disabled={busy || (!onText && !ready)} onClick={markReviewed}><Check/>{onText ? "Text geprüft" : "Seite geprüft"}</Button>
           <span className="text-sm text-muted-foreground" aria-live="polite">{reviewed.length} / {pages.length} Seiten geprüft{text.trim() ? ` · Text ${textReviewed ? "geprüft" : "offen"}` : ""}</span>
         </div>
-        {!canSend && !busy && <p className="redactor-review-hint">{onText ? "Bitte erst den Text prüfen – dann kannst du senden." : "Bitte erst jede Seite prüfen – dann kannst du senden."}</p>}
-        <Button variant="action" size="touch" className="w-full" disabled={!canSend || busy} onClick={() => { void send(); }}>{busy ? <LoaderCircle className="animate-spin"/> : <ShieldCheck/>}{busy ? "Brief wird verarbeitet …" : "Geprüften Brief senden"}</Button>
+        {!reviewComplete && !busy && <p className="redactor-review-hint">{onText ? "Bitte erst den Text prüfen – dann kannst du senden." : "Bitte erst jede Seite prüfen – dann kannst du senden."}</p>}
+        {reviewComplete && !canSend && !busy && !sent && <p className="redactor-review-hint">Bitte auswählen, wessen Brief das ist, und die Einwilligung bestätigen.</p>}
+        <Button variant="action" size="touch" className="w-full" disabled={!canSend || busy} onClick={() => { void send(); }}>{busy ? <LoaderCircle className="animate-spin"/> : <ShieldCheck/>}{busy ? "Brief wird verarbeitet …" : "An die KI senden"}</Button>
       </footer>
     </DialogContent>
   </Dialog>;

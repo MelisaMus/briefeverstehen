@@ -52,7 +52,15 @@ Vor dem Senden öffnet sich eine Prüfansicht. Dort werden Namen, Anschrift, Akt
 
 Die App läuft bei Lovable (Auftragsverarbeiter); Unterauftragnehmer sind unter anderem Cloudflare (Server-Laufzeit) und OpenAI (KI-Modell). Die Schrift DM Sans wird mit der App ausgeliefert, es werden keine Daten an Google Fonts übertragen. Die Besucherstatistik von Lovable arbeitet ohne Cookies.
 
-Die Datenschutzerklärung steht in `src/routes/datenschutz.tsx`. Drei Angaben sind dort noch als Platzhalter in eckigen Klammern offen: die Rechtsgrundlage für besondere Kategorien nach Art. 9 DSGVO (Briefe können z. B. Gesundheitsdaten enthalten), die Speicherdauer der Server-Protokolle und die Grundlage für Übermittlungen in die USA (laut Vertrag zur Auftragsverarbeitung mit Lovable).
+Die Datenschutzerklärung steht in `src/routes/datenschutz.tsx`. Angaben zur Auftragsverarbeitung, Modellanbieter-Aufbewahrung, Server-Protokollen und DPF-Zertifizierung sind im Entwicklungsmodus gelb mit „Mit Vertrag/Anbieterliste abgleichen“ markiert; auf der veröffentlichten Seite fehlen diese Markierungen. Die E-Mail-Löschfrist `[3 Monate – bitte prüfen]` bleibt ein offener Prüfpunkt. Diese Angaben müssen vor der Veröffentlichung anhand der Verträge und Anbieterangaben geprüft werden.
+
+### Einwilligung vor dem Senden
+
+Nach der Prüfung aller Seiten und des bearbeiteten Textes fragt die App: „Wessen Brief ist das?“ Bei einem eigenen Brief ist eine ausdrückliche Zustimmung zur einmaligen KI-Erklärung und Übersetzung erforderlich – auch für mögliche Gesundheitsdaten oder andere besonders schützenswerte Angaben. Wer einer anderen Person hilft, zeigt oder liest dieser Person einen vorbereiteten Einwilligungstext in Leichtem Deutsch und der gewählten Zielsprache vor und bestätigt deren ausdrückliche Zustimmung. Für „Nur Leichtes Deutsch“ erscheint nur die deutsche Fassung.
+
+Der Einwilligungstext kann vor Ort zweisprachig mit leeren Feldern für Datum und Unterschrift gedruckt werden; Briefinhalte werden dabei nicht gedruckt. Die vorbereiteten Übersetzungen in `src/config/consent.ts` benötigen keine KI-Anfrage. Die Vorlesefunktion nutzt wie bei den Ergebnissen die Stimme des Browsers bzw. Betriebssystems.
+
+„An die KI senden“ wird erst nach vollständiger Prüfung und der passenden Zustimmung aktiv. Die Auswahl bleibt ausschließlich im flüchtigen Zustand der Prüfansicht, wird nach erfolgreichem Senden verworfen und weder protokolliert noch in einer Datenbank, Datei oder im Browserspeicher gespeichert. Beim nächsten Brief oder nach einem Neuladen wird erneut gefragt. Beratungsstellen dokumentieren die Einwilligung nach ihren eigenen Regeln; gedruckte Formulare liegen in ihrer Verantwortung.
 
 Kopierte, gedruckte oder heruntergeladene Ergebnisse liegen anschließend in der Verantwortung der nutzenden Person.
 

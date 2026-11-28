@@ -39,3 +39,4 @@ use the editor.
 - Gate both AI server functions on AI_CONTENT_LOGGING_DISABLED_VERIFIED until gateway payload capture is disabled and verified; zero provider retention alone does not disable gateway content logs.
 - Derive urgent advice from a shared pure function and configured text/contact data; translate its prepared text with the letter so corrected deadlines and exports stay consistent without another AI request.
 - Require local review before analysis; flatten redactions into fresh image pixels and send only reviewed images and edited text, never original files or PDF text layers, so covered content cannot reach the AI.
+- Keep per-letter consent only in the review dialog's React state and use centrally prepared translations plus a print-only portal; this prevents pre-consent AI calls and persistence of consent or letter contents.

@@ -436,3 +436,24 @@ button, input, textarea { font: inherit; }
 .redactor-footer button { white-space: normal; }
 @media (max-width: 560px) { .redactor-dialog { width: calc(100% - 12px); max-height: calc(100dvh - 12px); } .redactor-header, .redactor-body, .redactor-footer { padding-left: 12px; padding-right: 12px; } .redactor-header { padding-right: 38px; } .redactor-numbers { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media print { .redactor-dialog { display: none !important; } }
+
+:root { --legal-review-bg: oklch(0.96 0.095 95); --legal-review-text: oklch(0.32 0.04 85); }
+.dark { --legal-review-bg: oklch(0.32 0.055 95); --legal-review-text: oklch(0.95 0.08 95); }
+.legal-review { background: var(--legal-review-bg); color: var(--legal-review-text); }
+.legal-review small { display: inline; font-size: 13px; font-weight: 600; }
+.letter-consent { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.letter-consent fieldset { margin-bottom: 16px; }
+.consent-choice { display: flex; gap: 12px; align-items: flex-start; min-height: 48px; padding: 12px 0; cursor: pointer; font-size: 17px; line-height: 1.6; overflow-wrap: anywhere; }
+.consent-choice input { width: 22px; height: 22px; flex: 0 0 22px; margin-top: 3px; accent-color: var(--primary); }
+.consent-choice input:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+.consent-confirmation { margin-top: 12px; }
+.consent-privacy { color: var(--primary); text-decoration: underline; font-size: 16px; }
+.consent-print { display: none; }
+@media print {
+  body:has(> .consent-print) > :not(.consent-print) { display: none !important; }
+  body > .consent-print { display: block; padding: 16mm; }
+  .consent-print h1 { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+  .consent-print .bilingual p { font-size: 18px; line-height: 1.7; }
+  .consent-print .translation { margin-top: 24px; }
+  .consent-signature { margin-top: 40px; font-size: 17px; }
+}

@@ -140,6 +140,6 @@ function Index() {
       </div>
       <div className="trust-line"><span><LockKeyhole size={14}/> Wir speichern deine Briefe nicht</span><span><FileCheck2 size={14}/> Kein Konto nötig</span><span><MessageCircle size={14}/> {languages.length} Zielsprachen</span></div>
     </main>
-    {prepared && <LetterRedactor pages={prepared.pages} text={prepared.text} onCancel={() => setPrepared(null)} onSend={sendReviewed}/>}
+    {prepared && <LetterRedactor pages={prepared.pages} text={prepared.text} language={translate ? language : "de"} onCancel={() => setPrepared(null)} onSend={sendReviewed}/>}
   </BriefShell>;
 }

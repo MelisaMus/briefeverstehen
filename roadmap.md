@@ -19,3 +19,7 @@
 - [x] Mobil- und Desktopansicht sowie Beispielablauf prüfen.
 
 - [x] Lokales Schwärzen von Fotos/PDFs und Bereinigen von Text vor jeder KI-Anfrage; übermittelte Bildpixel, Mobil-/Desktopablauf und 87 Tests geprüft.- [x] Schwärzungs-Ansicht erklären: Griff-Hinweis, Hinweis auf feste Schwärzung und Pflicht zur Seitenprüfung; mit erfundenem Brief geprüft.
+
+- [x] Einmalige Einwilligung im Prüfablauf mit zweisprachigem Vorlesen und lokalem Druck ergänzen.
+- [x] Datenschutzerklärung und README laut Einwilligungs-Anhang aktualisieren; Vertragsprüfpunkte nur in der Entwicklung markieren.
+- [x] Einwilligungsregeln testen und Ablauf auf kleinen sowie großen Bildschirmen prüfen.

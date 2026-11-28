@@ -5,7 +5,7 @@ export const legal = {
   plzOrt: "79106 Freiburg",
   email: "melisamustafovic@gmail.com",
   telefon: "[Telefonnummer]" as string | undefined,
-  stand: "November 2026",
+  stand: "28. November 2026",
 };
 
 export type LegalConfig = typeof legal;
